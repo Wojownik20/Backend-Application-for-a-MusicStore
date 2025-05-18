@@ -29,7 +29,7 @@ public class OrderController : ControllerBase //Base class
     /// </summary>
     /// <param name="id">Id of Order</param>
     /// <returns>200 and a order, 404 if id not found</returns>
-    [HttpGet("{Id}")]
+    [HttpGet("{id}")]
     public ActionResult<Order> GetById(int id)
     {
         var order = _orders.FirstOrDefault(o => o.Id == id);
@@ -47,9 +47,16 @@ public class OrderController : ControllerBase //Base class
     /// <param name="newOrder">New order</param>
     /// <returns>201 when order created</returns>
     [HttpPost]
-    public ActionResult<Order> Create(Order newOrder)
+    public ActionResult<Order> Create(OrderD orderDtos)
     {
-        newOrder.Id = _orders.Max(o => o.Id) + 1;
+        var newOrder = new Order
+        {
+            ProductId = orderDtos.ProductId,
+            CustomerId = orderDtos.CustomerId,
+            EmployeeId = orderDtos.EmployeeId,
+            TotalPrice = orderDtos.TotalPrice,
+            PurchaseDate = orderDtos.PurchaseDate
+        };
         _orders.Add(newOrder);
         return CreatedAtAction(nameof(GetById), new { id = newOrder.Id }, newOrder);
     }
@@ -61,7 +68,7 @@ public class OrderController : ControllerBase //Base class
     /// <param name="updatedOrder">Updated order</param>
     /// <returns>204 if Order updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Order updatedOrder)
+    public IActionResult Update(int id, OrderD orderDtos)
     {
         var order = _orders.FirstOrDefault(o => o.Id == id);
         if (order == null)
@@ -70,11 +77,11 @@ public class OrderController : ControllerBase //Base class
         }
         else
         {
-            order.ProductId = updatedOrder.ProductId;
-            order.CustomerId = updatedOrder.CustomerId;
-            order.EmployeeId = updatedOrder.EmployeeId;
-            order.PurchaseDate = updatedOrder.PurchaseDate;
-            order.TotalPrice = updatedOrder.TotalPrice;
+            order.ProductId = orderDtos.ProductId;
+            order.CustomerId = orderDtos.CustomerId;
+            order.EmployeeId = orderDtos.EmployeeId;
+            order.PurchaseDate = orderDtos.PurchaseDate;
+            order.TotalPrice = orderDtos.TotalPrice;
             return NoContent();
         }
     }

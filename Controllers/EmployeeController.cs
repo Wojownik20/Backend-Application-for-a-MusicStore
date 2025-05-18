@@ -29,7 +29,7 @@ public class EmployeeController : ControllerBase //Base class
     /// </summary>
     /// <param name="id">Id of the employee</param>
     /// <returns>200 if Employee found by id, 404 if id not found</returns>
-    [HttpGet("{Id}")]
+    [HttpGet("{id}")]
     public ActionResult<Employee> GetById(int id)
     {
         var employee = _employees.FirstOrDefault(e => e.Id == id);
@@ -47,9 +47,14 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="newEmployee">New employee</param>
     /// <returns>201 when Employee created</returns>
     [HttpPost]
-    public ActionResult<Employee> Create(Employee newEmployee)
+    public ActionResult<Employee> Create(EmployeeD employeeDtos)
     {
-        newEmployee.Id = _employees.Max(e => e.Id) + 1;
+        var newEmployee = new Employee
+        {
+            Name = employeeDtos.Name,
+            BirthDate = employeeDtos.BirthDate,
+            Salary = employeeDtos.Salary
+        };
         _employees.Add(newEmployee);
         return CreatedAtAction(nameof(GetById), new { id = newEmployee.Id }, newEmployee);
     }
@@ -61,7 +66,7 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="updatedEmployee">Updated Employee</param>
     /// <returns>204 if updated succesfuly, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Employee updatedEmployee)
+    public IActionResult Update(int id, EmployeeD employeeDtos)
     {
         var employee = _employees.FirstOrDefault(e => e.Id == id);
         if (employee == null)
@@ -70,9 +75,9 @@ public class EmployeeController : ControllerBase //Base class
         }
         else
         {
-            employee.Name = updatedEmployee.Name;
-            employee.BirthDate = updatedEmployee.BirthDate;
-            employee.Salary = updatedEmployee.Salary;
+            employee.Name = employeeDtos.Name;
+            employee.BirthDate = employeeDtos.BirthDate;
+            employee.Salary = employeeDtos.Salary;
             return NoContent();
         }
     }
