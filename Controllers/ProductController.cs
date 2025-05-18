@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LeverX.Models;
+using LeverX.ModelsD;
 
 namespace LeverX.Controllers;
 
@@ -44,11 +45,20 @@ public class ProductController : ControllerBase //Base class
     /// <param name="newProduct">New Product</param>
     /// <returns>201 + Link to get api/product</returns>
     [HttpPost]
-    public ActionResult<Product> Create(Product newProduct)
+    public ActionResult<Product> Create(ProductD productDtos)
     {
-        newProduct.Id = _products.Max(p => p.Id) + 1;
+        var newProduct = new Product
+        {
+            Id = _products.Max(p => p.Id) + 1,
+            Name = productDtos.Name,
+            Category = productDtos.Category,
+            Price = productDtos.Price,
+            ReleaseDate = productDtos.ReleaseDate
+        };
+
         _products.Add(newProduct);
-        return CreatedAtAction(nameof(GetById), new { id = newProduct.Id }, newProduct); // Return 201 Created + link to GET /api/product/{id}
+        return CreatedAtAction(nameof(GetById), new { id = newProduct.Id }, newProduct);
+
     }
 
     /// <summary>
@@ -58,17 +68,23 @@ public class ProductController : ControllerBase //Base class
     /// <param name="updatedProduct">Updated product</param>
     /// <returns>204 if product updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Product updatedProduct)
+    public IActionResult Update(int id, ProductD productDtos)
     {
-        var product = _products.FirstOrDefault(p => p.Id == id); //Searching for product by Id
-        if (product == null) return NotFound(); // Return 404 if no product found
+        var product = _products.FirstOrDefault(p => p.Id == id);
+        if(product==null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            product.Name = productDtos.Name;
+            product.Category = productDtos.Category;
+            product.Price = productDtos.Price;
+            product.ReleaseDate = productDtos.ReleaseDate;
 
-        product.Name = updatedProduct.Name;
-        product.Category = updatedProduct.Category;
-        product.Price = updatedProduct.Price;
-        product.ReleaseDate = updatedProduct.ReleaseDate;
+            return NoContent();
+        }
 
-        return NoContent(); // If found -> updates data and return 204 NoContent
     }
 
     /// <summary>
