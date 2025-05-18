@@ -1,6 +1,6 @@
 using System;
 namespace LeverX.Models;
-public class CustomerD
+public class CustomerDto
 {
 
     public string? Name { get; set; }
