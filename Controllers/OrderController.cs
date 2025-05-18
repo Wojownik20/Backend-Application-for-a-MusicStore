@@ -47,15 +47,15 @@ public class OrderController : ControllerBase //Base class
     /// <param name="newOrder">New order</param>
     /// <returns>201 when order created</returns>
     [HttpPost]
-    public ActionResult<Order> Create(OrderD orderDtos)
+    public ActionResult<Order> Create(OrderDto orderDto)
     {
         var newOrder = new Order
         {
-            ProductId = orderDtos.ProductId,
-            CustomerId = orderDtos.CustomerId,
-            EmployeeId = orderDtos.EmployeeId,
-            TotalPrice = orderDtos.TotalPrice,
-            PurchaseDate = orderDtos.PurchaseDate
+            ProductId = orderDto.ProductId,
+            CustomerId = orderDto.CustomerId,
+            EmployeeId = orderDto.EmployeeId,
+            TotalPrice = orderDto.TotalPrice,
+            PurchaseDate = orderDto.PurchaseDate
         };
         _orders.Add(newOrder);
         return CreatedAtAction(nameof(GetById), new { id = newOrder.Id }, newOrder);
@@ -68,7 +68,7 @@ public class OrderController : ControllerBase //Base class
     /// <param name="updatedOrder">Updated order</param>
     /// <returns>204 if Order updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, OrderD orderDtos)
+    public IActionResult Update(int id, OrderDto orderDto)
     {
         var order = _orders.FirstOrDefault(o => o.Id == id);
         if (order == null)
@@ -77,11 +77,11 @@ public class OrderController : ControllerBase //Base class
         }
         else
         {
-            order.ProductId = orderDtos.ProductId;
-            order.CustomerId = orderDtos.CustomerId;
-            order.EmployeeId = orderDtos.EmployeeId;
-            order.PurchaseDate = orderDtos.PurchaseDate;
-            order.TotalPrice = orderDtos.TotalPrice;
+            order.ProductId = orderDto.ProductId;
+            order.CustomerId = orderDto.CustomerId;
+            order.EmployeeId = orderDto.EmployeeId;
+            order.PurchaseDate = orderDto.PurchaseDate;
+            order.TotalPrice = orderDto.TotalPrice;
             return NoContent();
         }
     }

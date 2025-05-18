@@ -47,13 +47,13 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="newEmployee">New employee</param>
     /// <returns>201 when Employee created</returns>
     [HttpPost]
-    public ActionResult<Employee> Create(EmployeeD employeeDtos)
+    public ActionResult<Employee> Create(EmployeeDto employeeDto)
     {
         var newEmployee = new Employee
         {
-            Name = employeeDtos.Name,
-            BirthDate = employeeDtos.BirthDate,
-            Salary = employeeDtos.Salary
+            Name = employeeDto.Name,
+            BirthDate = employeeDto.BirthDate,
+            Salary = employeeDto.Salary
         };
         _employees.Add(newEmployee);
         return CreatedAtAction(nameof(GetById), new { id = newEmployee.Id }, newEmployee);
@@ -66,7 +66,7 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="updatedEmployee">Updated Employee</param>
     /// <returns>204 if updated succesfuly, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, EmployeeD employeeDtos)
+    public IActionResult Update(int id, EmployeeDto employeeDto)
     {
         var employee = _employees.FirstOrDefault(e => e.Id == id);
         if (employee == null)
@@ -75,9 +75,9 @@ public class EmployeeController : ControllerBase //Base class
         }
         else
         {
-            employee.Name = employeeDtos.Name;
-            employee.BirthDate = employeeDtos.BirthDate;
-            employee.Salary = employeeDtos.Salary;
+            employee.Name = employeeDto.Name;
+            employee.BirthDate = employeeDto.BirthDate;
+            employee.Salary = employeeDto.Salary;
             return NoContent();
         }
     }
