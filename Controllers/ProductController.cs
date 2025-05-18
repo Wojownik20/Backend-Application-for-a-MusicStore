@@ -45,15 +45,15 @@ public class ProductController : ControllerBase //Base class
     /// <param name="newProduct">New Product</param>
     /// <returns>201 + Link to get api/product</returns>
     [HttpPost]
-    public ActionResult<Product> Create(ProductD productDtos)
+    public ActionResult<Product> Create(ProductDto productDto)
     {
         var newProduct = new Product
         {
             Id = _products.Max(p => p.Id) + 1,
-            Name = productDtos.Name,
-            Category = productDtos.Category,
-            Price = productDtos.Price,
-            ReleaseDate = productDtos.ReleaseDate
+            Name = productDto.Name,
+            Category = productDto.Category,
+            Price = productDto.Price,
+            ReleaseDate = productDto.ReleaseDate
         };
 
         _products.Add(newProduct);
@@ -68,7 +68,7 @@ public class ProductController : ControllerBase //Base class
     /// <param name="updatedProduct">Updated product</param>
     /// <returns>204 if product updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, ProductD productDtos)
+    public IActionResult Update(int id, ProductDto productDto)
     {
         var product = _products.FirstOrDefault(p => p.Id == id);
         if(product==null)
@@ -77,10 +77,10 @@ public class ProductController : ControllerBase //Base class
         }
         else
         {
-            product.Name = productDtos.Name;
-            product.Category = productDtos.Category;
-            product.Price = productDtos.Price;
-            product.ReleaseDate = productDtos.ReleaseDate;
+            product.Name = productDto.Name;
+            product.Category = productDto.Category;
+            product.Price = productDto.Price;
+            product.ReleaseDate = productDto.ReleaseDate;
 
             return NoContent();
         }

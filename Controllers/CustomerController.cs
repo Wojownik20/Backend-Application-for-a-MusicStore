@@ -47,12 +47,12 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="newCustomer">New customer</param>
     /// <returns>201 when a new customer is created</returns>
     [HttpPost]
-    public ActionResult<Customer> Create(CustomerD customerDtos)
+    public ActionResult<Customer> Create(CustomerDto customerDto)
     {
         var newCustomer = new Customer
         {
-            Name = customerDtos.Name,
-            BirthDate = customerDtos.BirthDate
+            Name = customerDto.Name,
+            BirthDate = customerDto.BirthDate
         };
         _customers.Add(newCustomer);
         return CreatedAtAction(nameof(GetById), new { id = newCustomer.Id }, newCustomer);
@@ -65,7 +65,7 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="updatedCustomer">updated customer record</param>
     /// <returns>204 if customer updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, CustomerD customerDtos)
+    public IActionResult Update(int id, CustomerDto customerDto)
     {
         var customer = _customers.FirstOrDefault(c => c.Id == id);
         if (customer == null)
@@ -73,8 +73,8 @@ public class CustomerController : ControllerBase //Base class
             return NotFound();
         }
         else {
-            customer.Name = customerDtos.Name;
-            customer.BirthDate = customerDtos.BirthDate;
+            customer.Name = customerDto.Name;
+            customer.BirthDate = customerDto.BirthDate;
             return NoContent();
         }
     }
