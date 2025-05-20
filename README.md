@@ -3,10 +3,10 @@
 Web API Project for LeverX .NET Programme. 
 App simulates a work of Music Store - it operates on products, employees, customers and orders itself.
 
-## Technologies
-- ASP.NET Core 8.0
-- Swagger / OpenAPI
-- C#
+## 🔧 Tech Stack
+- ASP.NET Core 8
+- Entity Framework Core
+- SQL Server
 
 ## Data Models 
 - `Product` - CD's, Vinyl's, Merchandise
