@@ -41,3 +41,8 @@ GO
 ALTER TABLE dbo.[Order] ADD CONSTRAINT FK_Order_Product FOREIGN KEY(ProductId) REFERENCES dbo.Product(Id);
 ALTER TABLE dbo.[Order] ADD CONSTRAINT FK_Order_Employee FOREIGN KEY(EmployeeId) REFERENCES dbo.Employee(Id);
 ALTER TABLE dbo.[Order] ADD CONSTRAINT FK_Order_Customer FOREIGN KEY(CustomerId) REFERENCES dbo.Customer(Id);
+
+CREATE INDEX IX_Order_ProductId ON dbo.[Order](ProductId);
+CREATE INDEX IX_Order_Employee ON dbo.[Order](EmployeeId);
+CREATE INDEX IX_Order_Customer ON dbo.[Order](CustomerId);
+CREATE INDEX IX_Product_Category ON dbo.Product(Category); -- Probably frequently filtered column
