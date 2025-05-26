@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LeverX.Models;
 using LeverX.ModelsD;
+using LeverX.WebAPI.ModelsD;
 
 namespace LeverX.Services
 {

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using LeverX.Models;
+using LeverX.WebAPI.ModelsD;
+using LeverX.Domain.Models;
 
-namespace LeverX.Controllers;
+namespace LeverX.WebAPI.Controllers;
 
 [ApiController] //Tells ASP.NET that its a Controller
 [Route("api/[controller]")] // Route for api/product

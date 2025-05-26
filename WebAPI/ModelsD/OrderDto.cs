@@ -1,9 +1,7 @@
 using System;
-namespace LeverX.Models;
-public class Order
+namespace LeverX.WebAPI.ModelsD;
+public class OrderDto
 {
-
-    public int Id { get; set; }
     public int ProductId { get; set; }
     public int CustomerId { get; set; }
     public int EmployeeId { get; set; }

@@ -1,5 +1,5 @@
 using System;
-namespace LeverX.ModelsD;
+namespace LeverX.WebAPI.ModelsD;
 public class ProductDto
 {
     public string Name { get; set; }

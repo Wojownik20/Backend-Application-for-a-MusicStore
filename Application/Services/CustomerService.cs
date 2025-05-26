@@ -5,6 +5,7 @@ using LeverX.ModelsD;
 using LeverX.Repositories;
 using LeverX.Models;
 using System.Diagnostics.Eventing.Reader;
+using LeverX.WebAPI.ModelsD;
 
 namespace LeverX.Services
 {

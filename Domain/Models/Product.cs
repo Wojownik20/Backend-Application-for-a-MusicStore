@@ -1,5 +1,5 @@
 ﻿using System;
-namespace LeverX.Models;
+namespace LeverX.Domain.Models;
 public class Product
 {
 		public int Id { get; set; }
