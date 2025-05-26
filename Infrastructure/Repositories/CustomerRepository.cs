@@ -1,19 +1,54 @@
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using LeverX.Application.Interfaces;
+using LeverX.Domain.Models;
+using LeverX.Infrastructure.DbContext;
 
-// W projektach w stylu zestawu SDK, takich jak ten, kilka atrybutów zestawu, kiedyś
-// definiowanych w tym pliku, jest teraz automatycznie dodawanych podczas kompilacji
-// i wypełnianych wartościami zdefiniowanymi we właściwościach projektu. Aby uzyskać
-// szczegółowe informacje o tym, które atrybuty są dołączane i jak dostosować ten
-// proces, zobacz: https://aka.ms/assembly-info-properties
+namespace LeverX.Infrastructure.Repositories
+{
+    public class CustomerRepository : ICustomerRepository //Dependency Inversion Principle
+    {
+        private readonly MusicStoreContext _context;
+
+        public CustomerRepository(MusicStoreContext context) // DB injection, thats what we work on
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Customer>> GetAllAsync()
+        {
+            return await _context.Customers.ToListAsync(); // Async getting list of customers
+        }
+
+        public async Task<Customer> GetByIdAsync(int id)
+        {
+            return await _context.Customers.FindAsync(id);
+        }
+
+        public async Task AddAsync(Customer customer)
+        {
+            await _context.Customers.AddAsync(customer);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Customer customer)
+        {
+             _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+            if(customer != null)
+            {
+                _context.Customers.Remove(customer);
+                _context.SaveChanges();
+            }
+        }
+    }
 
 
-// Ustawienie atrybutu ComVisible na wartość false sprawia, że typy w tym zestawie
-// nie są widoczne dla składników modelu COM. Jeśli chcesz uzyskać dostęp do typu
-// w tym zestawie z modelu COM, ustaw w tym typie atrybut ComVisible na wartość true.
 
-[assembly: ComVisible(false)]
-
-// Następujący identyfikator GUID jest identyfikatorem elementu typelib w przypadku
-// udostępnienia tego projektu w modelu COM.
-
-[assembly: Guid("b1a581f1-4b5a-4801-a3b8-bf07ee9581e3")]
+}

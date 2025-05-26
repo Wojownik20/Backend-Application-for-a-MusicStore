@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using LeverX.WebAPI.ModelsD;
+using LeverX.Application.Interfaces;
+using LeverX.Application.Services;
 using LeverX.Domain.Models;
+using LeverX.WebAPI.ModelsD;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LeverX.WebAPI.Controllers;
 
@@ -8,21 +10,22 @@ namespace LeverX.WebAPI.Controllers;
 [Route("api/[controller]")] // Route for api/product
 public class CustomerController : ControllerBase //Base class
 {
-    private static List<Customer> _customers = new List<Customer>
+
+    private readonly ICustomerService _customerService; // Injecting our DB
+    public CustomerController(ICustomerService customerService)
     {
-        new Customer {Id = 1 , Name = "Mohamed Salah", BirthDate = new DateTime(1992,6,15)},
-        new Customer {Id = 2 , Name = "Roberto Firmino", BirthDate = new DateTime(1991,10,2)},
-        new Customer {Id = 3 , Name = "Sadio Mane", BirthDate = new DateTime(1992,4,10)}
-    };
+        _customerService = customerService;
+    }
 
     /// <summary>
     /// Return a list of Customers
     /// </summary>
     /// <returns>200 OK and JSON list of customers</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Customer>> GetAll()
+    public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        return Ok(_customers); // return 200 OK 
+        var customers = await _customerService.GetAllCustomersAsync();
+        return Ok(customers); // return 200 OK 
     }
 
     /// <summary>
@@ -31,9 +34,9 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="id">Id of an customer</param>
     /// <returns>200 if Customer found, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public ActionResult<Customer> GetById(int id)
+    public async Task<ActionResult<CustomerDto>> GetById(int id)
     {
-        var customer = _customers.FirstOrDefault(c => c.Id == id);
+        var customer = await _customerService.GetCustomerByIdAsync(id);
         if (customer == null)
             return NotFound();
         else
@@ -48,15 +51,10 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="newCustomer">New customer</param>
     /// <returns>201 when a new customer is created</returns>
     [HttpPost]
-    public ActionResult<Customer> Create(CustomerDto customerDto)
+    public async Task<IActionResult> Create(CustomerDto customerDto)
     {
-        var newCustomer = new Customer
-        {
-            Name = customerDto.Name,
-            BirthDate = customerDto.BirthDate
-        };
-        _customers.Add(newCustomer);
-        return CreatedAtAction(nameof(GetById), new { id = newCustomer.Id }, newCustomer);
+        await _customerService.CreateCustomerAsync(customerDto);
+        return Ok();
     }
 
     /// <summary>
@@ -66,37 +64,21 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="updatedCustomer">updated customer record</param>
     /// <returns>204 if customer updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, CustomerDto customerDto)
-    {
-        var customer = _customers.FirstOrDefault(c => c.Id == id);
-        if (customer == null)
-        {
-            return NotFound();
-        }
-        else {
-            customer.Name = customerDto.Name;
-            customer.BirthDate = customerDto.BirthDate;
-            return NoContent();
+    public async Task<IActionResult> Update(CustomerDto customerDto) {
+        
+            await _customerService.UpdateCustomerAsync(customerDto);
+            return Ok();
+        
+    }
+        /// <summary>
+        /// Deletion of customer
+        /// </summary>
+        /// <param name="id">id of the customer</param>
+        /// <returns>204 if customer deleted, 404 if id not found</returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) {
+            await _customerService.DeleteCustomerAsync(id);
+            return Ok();
         }
     }
 
-    /// <summary>
-    /// Deletion of customer
-    /// </summary>
-    /// <param name="id">id of the customer</param>
-    /// <returns>204 if customer deleted, 404 if id not found</returns>
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        var customer = _customers.FirstOrDefault(c => c.Id == id);
-        if (customer == null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            _customers.Remove(customer);
-            return NoContent();
-        }
-    }
-}

@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using LeverX.WebAPI.ModelsD;
+using LeverX.Application.Interfaces;
+using LeverX.Application.Services;
 using LeverX.Domain.Models;
+using LeverX.WebAPI.ModelsD;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LeverX.WebAPI.Controllers;
 
@@ -8,21 +10,22 @@ namespace LeverX.WebAPI.Controllers;
 [Route("api/[controller]")] // Route for api/product
 public class EmployeeController : ControllerBase //Base class
 {
-    private static List<Employee> _employees = new List<Employee>
+    private readonly IEmployeeService _employeeService; // Injecting our DB
+    public EmployeeController(IEmployeeService employeeService)
     {
-        new Employee {Id = 1 , Name = "Robert Lewandowski", BirthDate = new DateTime(1992,6,15),Salary = 5000m},
-        new Employee {Id = 2 , Name = "Wojtek Szczęsny", BirthDate = new DateTime(1991,10,2), Salary = 6500m},
-        new Employee {Id = 3 , Name = "Nicola Zalewski", BirthDate = new DateTime(1992,4,10), Salary = 3250m}
-    };
+        _employeeService = employeeService;
+    }
+
 
     /// <summary>
     /// Gets all employees
     /// </summary>
     /// <returns>200 and JSON list of Employees</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Employee>> GetAll()
+    public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        return Ok(_employees); // return 200 OK 
+        var employees = await _employeeService.GetAllEmployeesAsync();
+        return Ok(employees); // return 200 OK 
     }
 
     /// <summary>
@@ -31,9 +34,9 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="id">Id of the employee</param>
     /// <returns>200 if Employee found by id, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public ActionResult<Employee> GetById(int id)
+    public async Task<ActionResult<EmployeeDto>> GetById(int id)
     {
-        var employee = _employees.FirstOrDefault(e => e.Id == id);
+        var employee = await _employeeService.GetEmployeeByIdAsync(id);
         if (employee == null)
             return NotFound();
         else
@@ -48,16 +51,10 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="newEmployee">New employee</param>
     /// <returns>201 when Employee created</returns>
     [HttpPost]
-    public ActionResult<Employee> Create(EmployeeDto employeeDto)
+    public async Task<IActionResult> Create(EmployeeDto employeeDto)
     {
-        var newEmployee = new Employee
-        {
-            Name = employeeDto.Name,
-            BirthDate = employeeDto.BirthDate,
-            Salary = employeeDto.Salary
-        };
-        _employees.Add(newEmployee);
-        return CreatedAtAction(nameof(GetById), new { id = newEmployee.Id }, newEmployee);
+        await _employeeService.CreateEmployeeAsync(employeeDto);
+        return Ok();
     }
 
     /// <summary>
@@ -67,20 +64,12 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="updatedEmployee">Updated Employee</param>
     /// <returns>204 if updated succesfuly, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, EmployeeDto employeeDto)
+    public async Task<IActionResult> Update(EmployeeDto employeeDto)
     {
-        var employee = _employees.FirstOrDefault(e => e.Id == id);
-        if (employee == null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            employee.Name = employeeDto.Name;
-            employee.BirthDate = employeeDto.BirthDate;
-            employee.Salary = employeeDto.Salary;
-            return NoContent();
-        }
+
+        await _employeeService.UpdateEmployeeAsync(employeeDto);
+        return Ok();
+
     }
 
     /// <summary>
@@ -89,17 +78,9 @@ public class EmployeeController : ControllerBase //Base class
     /// <param name="id">id of an employee</param>
     /// <returns>204 if deletion successful, 404 if id not found</returns>
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var employee = _employees.FirstOrDefault(e => e.Id == id);
-        if (employee == null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            _employees.Remove(employee);
-            return NoContent();
-        }
+        await _employeeService.DeleteEmployeeAsync(id);
+        return Ok();
     }
 }

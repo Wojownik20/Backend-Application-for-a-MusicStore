@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LeverX.ModelsD;
 using LeverX.WebAPI.ModelsD;
 
-namespace LeverX.Services
+namespace LeverX.Application.Interfaces
 {
     public interface ICustomerService // Reminder : Interface is a bunch of essential methods
     {

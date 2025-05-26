@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using LeverX.WebAPI.ModelsD;
+using LeverX.Application.Interfaces;
+using LeverX.Application.Services;
 using LeverX.Domain.Models;
+using LeverX.WebAPI.ModelsD;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LeverX.WebAPI.Controllers;
 
@@ -8,21 +10,21 @@ namespace LeverX.WebAPI.Controllers;
 [Route("api/[controller]")] // Route for api/product
 public class OrderController : ControllerBase //Base class
 {
-    private static List<Order> _orders = new List<Order>
+    private readonly IOrderService _orderService; // Injecting our DB
+    public OrderController(IOrderService orderService)
     {
-        new Order {Id = 1 , ProductId = 1, CustomerId = 1, EmployeeId=1, TotalPrice=150m, PurchaseDate = new DateTime(2004, 9,16)},
-        new Order {Id = 2 , ProductId = 2, CustomerId = 2, EmployeeId=2, TotalPrice=56m, PurchaseDate = new DateTime(2014, 1, 17)},
-        new Order {Id = 3 , ProductId = 3, CustomerId = 3, EmployeeId=3, TotalPrice=189m, PurchaseDate = new DateTime(2024, 5, 16)}
-    };
+        _orderService = orderService;
+    }
 
     /// <summary>
     /// Returns a list of Orders
     /// </summary>
     /// <returns>200 and JSON list of Orders</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Order>> GetAll()
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        return Ok(_orders); // return 200 OK 
+        var order = await _orderService.GetAllOrdersAsync();
+        return Ok(order); // return 200 OK 
     }
 
     /// <summary>
@@ -31,9 +33,9 @@ public class OrderController : ControllerBase //Base class
     /// <param name="id">Id of Order</param>
     /// <returns>200 and a order, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public ActionResult<Order> GetById(int id)
+    public async Task<ActionResult<OrderDto>> GetById(int id)
     {
-        var order = _orders.FirstOrDefault(o => o.Id == id);
+        var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
             return NotFound();
         else
@@ -48,18 +50,10 @@ public class OrderController : ControllerBase //Base class
     /// <param name="newOrder">New order</param>
     /// <returns>201 when order created</returns>
     [HttpPost]
-    public ActionResult<Order> Create(OrderDto orderDto)
+    public async Task<IActionResult> Create(OrderDto orderDto)
     {
-        var newOrder = new Order
-        {
-            ProductId = orderDto.ProductId,
-            CustomerId = orderDto.CustomerId,
-            EmployeeId = orderDto.EmployeeId,
-            TotalPrice = orderDto.TotalPrice,
-            PurchaseDate = orderDto.PurchaseDate
-        };
-        _orders.Add(newOrder);
-        return CreatedAtAction(nameof(GetById), new { id = newOrder.Id }, newOrder);
+        await _orderService.CreateOrderAsync(orderDto);
+        return Ok();
     }
 
     /// <summary>
@@ -69,22 +63,12 @@ public class OrderController : ControllerBase //Base class
     /// <param name="updatedOrder">Updated order</param>
     /// <returns>204 if Order updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public IActionResult Update(int id, OrderDto orderDto)
+    public async Task<IActionResult> Update(OrderDto orderDto)
     {
-        var order = _orders.FirstOrDefault(o => o.Id == id);
-        if (order == null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            order.ProductId = orderDto.ProductId;
-            order.CustomerId = orderDto.CustomerId;
-            order.EmployeeId = orderDto.EmployeeId;
-            order.PurchaseDate = orderDto.PurchaseDate;
-            order.TotalPrice = orderDto.TotalPrice;
-            return NoContent();
-        }
+
+        await _orderService.UpdateOrderAsync(orderDto);
+        return Ok();
+
     }
 
     /// <summary>
@@ -93,17 +77,9 @@ public class OrderController : ControllerBase //Base class
     /// <param name="id">id of the order</param>
     /// <returns>204 if order deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var order = _orders.FirstOrDefault(o => o.Id == id);
-        if (order == null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            _orders.Remove(order);
-            return NoContent();
-        }
+        await _orderService.DeleteOrderAsync(id);
+        return Ok();
     }
 }

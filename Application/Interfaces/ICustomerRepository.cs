@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LeverX.Models;
+using LeverX.Domain.Models;
 
-namespace LeverX.Repositories
+namespace LeverX.Application.Interfaces
 {
     public interface ICustomerRepository // This guy is the one and only talking to the DB
     {
-        Task<IEnumerable<Customer>> GetAll();
+        Task<IEnumerable<Customer>> GetAllAsync();
         Task<Customer> GetByIdAsync(int id);
         Task AddAsync (Customer customer);
         Task UpdateAsync (Customer customer); 

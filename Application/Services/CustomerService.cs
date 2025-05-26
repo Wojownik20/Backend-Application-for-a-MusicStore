@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LeverX.ModelsD;
-using LeverX.Repositories;
-using LeverX.Models;
+using LeverX.Domain.Models;
 using System.Diagnostics.Eventing.Reader;
 using LeverX.WebAPI.ModelsD;
+using LeverX.Application.Interfaces;
 
-namespace LeverX.Services
+namespace LeverX.Application.Services
 {
 
     public class CustomerService : ICustomerService
@@ -52,7 +51,8 @@ namespace LeverX.Services
         {
             var customer = new Customer
             {
-                Name = customerDto.Name
+                Name = customerDto.Name,
+                BirthDate= customerDto.BirthDate
             };
             await _customerRepository.AddAsync(customer);
         }
