@@ -18,20 +18,20 @@ namespace LeverX.Application.Services
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             var products = await _productRepository.GetAllAsync();
-            var productDtos = products.Select(p => new ProductDto
+            var product = products.Select(p => new Product
             {
                 Name = p.Name,
                 Category = p.Category,
                 Price = p.Price,
                 ReleaseDate = p.ReleaseDate
             });
-            return productDtos;
+            return product;
         }
 
-        public async Task<ProductDto> GetProductByIdAsync(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null)
@@ -40,7 +40,7 @@ namespace LeverX.Application.Services
             }
             else
             {
-                return new ProductDto
+                return new Product
                 {
                     Name = product.Name,
                     Category = product.Category,
@@ -51,28 +51,28 @@ namespace LeverX.Application.Services
 
         }
 
-        public async Task CreateProductAsync(ProductDto productDto)
+        public async Task CreateProductAsync(Product product)
         {
-            var product = new Product
+            var products = new Product
             {
-                Name = productDto.Name,
-                Category = productDto.Category,
-                Price = productDto.Price,
-                ReleaseDate = productDto.ReleaseDate 
+                Name = product.Name,
+                Category = product.Category,
+                Price = product.Price,
+                ReleaseDate = product.ReleaseDate 
             };
-            await _productRepository.AddAsync(product);
+            await _productRepository.AddAsync(products);
         }
 
-        public async Task UpdateProductAsync(ProductDto productDto)
+        public async Task UpdateProductAsync(Product product)
         {
-            var product = new Product
+            var products = new Product
             {
-                Name = productDto.Name,
-                Category = productDto.Category,
-                Price = productDto.Price,
-                ReleaseDate = productDto.ReleaseDate
+                Name = product.Name,
+                Category = product.Category,
+                Price = product.Price,
+                ReleaseDate = product.ReleaseDate
             };
-            await _productRepository.UpdateAsync(product);
+            await _productRepository.UpdateAsync(products);
         }
 
         public async Task DeleteProductAsync(int id)

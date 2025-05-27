@@ -18,18 +18,18 @@ namespace LeverX.Application.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
+        public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
             var customers = await _customerRepository.GetAllAsync();
-            var customerDtos = customers.Select(c => new CustomerDto
+            var customer = customers.Select(c => new Customer
             {
                 Name = c.Name,
                 BirthDate = c.BirthDate,
             });
-            return customerDtos;
+            return customer;
         }
 
-        public async Task<CustomerDto> GetCustomerByIdAsync(int id)
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
             var customer = await _customerRepository.GetByIdAsync(id);
             if (customer == null)
@@ -38,7 +38,7 @@ namespace LeverX.Application.Services
             }
             else
             {
-                return new CustomerDto
+                return new Customer
                 {
                     Name = customer.Name,
                     BirthDate = customer.BirthDate
@@ -47,24 +47,24 @@ namespace LeverX.Application.Services
 
         }
 
-        public async Task CreateCustomerAsync(CustomerDto customerDto)
+        public async Task CreateCustomerAsync(Customer customer)
         {
-            var customer = new Customer
+            var customers = new Customer
             {
-                Name = customerDto.Name,
-                BirthDate= customerDto.BirthDate
+                Name = customer.Name,
+                BirthDate= customer.BirthDate
             };
-            await _customerRepository.AddAsync(customer);
+            await _customerRepository.AddAsync(customers);
         }
 
-        public async Task UpdateCustomerAsync(CustomerDto customerDto)
+        public async Task UpdateCustomerAsync(Customer customer)
         {
-            var customer = new Customer
+            var customers = new Customer
             {
-                Name = customerDto.Name,
-                BirthDate = customerDto.BirthDate
+                Name = customer.Name,
+                BirthDate = customer.BirthDate
             };
-            await _customerRepository.UpdateAsync(customer);
+            await _customerRepository.UpdateAsync(customers);
         }
 
         public async Task DeleteCustomerAsync(int id)

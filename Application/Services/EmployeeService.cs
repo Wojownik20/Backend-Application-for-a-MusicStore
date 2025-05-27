@@ -18,19 +18,19 @@ namespace LeverX.Application.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
         {
             var employees = await _employeeRepository.GetAllAsync();
-            var employeeDtos = employees.Select(e => new EmployeeDto
+            var employee = employees.Select(e => new Employee
             {
                 Name = e.Name,
                 BirthDate = e.BirthDate,
                 Salary = e.Salary
             });
-            return employeeDtos;
+            return employee;
         }
 
-        public async Task<EmployeeDto> GetEmployeeByIdAsync(int id)
+        public async Task<Employee> GetEmployeeByIdAsync(int id)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);
             if (employee == null)
@@ -39,7 +39,7 @@ namespace LeverX.Application.Services
             }
             else
             {
-                return new EmployeeDto
+                return new Employee
                 {
                     Name = employee.Name,
                     BirthDate = employee.BirthDate,
@@ -49,26 +49,26 @@ namespace LeverX.Application.Services
 
         }
 
-        public async Task CreateEmployeeAsync(EmployeeDto employeeDto)
+        public async Task CreateEmployeeAsync(Employee employee)
         {
-            var employee = new Employee
+            var employees = new Employee
             {
-                Name = employeeDto.Name,
-                BirthDate= employeeDto.BirthDate,
-                Salary = employeeDto.Salary 
+                Name = employee.Name,
+                BirthDate= employee.BirthDate,
+                Salary = employee.Salary 
             };
-            await _employeeRepository.AddAsync(employee);
+            await _employeeRepository.AddAsync(employees);
         }
 
-        public async Task UpdateEmployeeAsync(EmployeeDto employeeDto)
+        public async Task UpdateEmployeeAsync(Employee employee)
         {
-            var employee = new Employee
+            var employees = new Employee
             {
-                Name = employeeDto.Name,
-                BirthDate = employeeDto.BirthDate,
-                Salary= employeeDto.Salary
+                Name = employee.Name,
+                BirthDate = employee.BirthDate,
+                Salary= employee.Salary
             };
-            await _employeeRepository.UpdateAsync(employee);
+            await _employeeRepository.UpdateAsync(employees);
         }
 
         public async Task DeleteEmployeeAsync(int id)

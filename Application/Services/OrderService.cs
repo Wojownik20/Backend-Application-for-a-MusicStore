@@ -18,10 +18,10 @@ namespace LeverX.Application.Services
             _orderRepository = orderRepository;
         }
 
-        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetAllAsync();
-            var orderDtos = orders.Select(o => new OrderDto
+            var order = orders.Select(o => new Order
             {
                 ProductId = o.ProductId,
                 CustomerId = o.CustomerId,
@@ -29,10 +29,10 @@ namespace LeverX.Application.Services
                 TotalPrice = o.TotalPrice,
                 PurchaseDate = o.PurchaseDate
             });
-            return orderDtos;
+            return order;
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByIdAsync(int id)
         {
             var order = await _orderRepository.GetByIdAsync(id);
             if (order == null)
@@ -41,7 +41,7 @@ namespace LeverX.Application.Services
             }
             else
             {
-                return new OrderDto
+                return new Order
                 {
                     ProductId = order.ProductId,
                     CustomerId = order.CustomerId,
@@ -53,30 +53,30 @@ namespace LeverX.Application.Services
 
         }
 
-        public async Task CreateOrderAsync(OrderDto orderDto)
+        public async Task CreateOrderAsync(Order order)
         {
-            var order = new Order
+            var orders = new Order
             {
-                ProductId = orderDto.ProductId,
-                CustomerId = orderDto.CustomerId,
-                EmployeeId = orderDto.EmployeeId,
-                TotalPrice = orderDto.TotalPrice,
-                PurchaseDate = orderDto.PurchaseDate
+                ProductId = order.ProductId,
+                CustomerId = order.CustomerId,
+                EmployeeId = order.EmployeeId,
+                TotalPrice = order.TotalPrice,
+                PurchaseDate = order.PurchaseDate
             };
-            await _orderRepository.AddAsync(order);
+            await _orderRepository.AddAsync(orders);
         }
 
-        public async Task UpdateOrderAsync(OrderDto orderDto)
+        public async Task UpdateOrderAsync(Order order)
         {
-            var order = new Order
+            var orders = new Order
             {
-                ProductId = orderDto.ProductId,
-                CustomerId = orderDto.CustomerId,
-                EmployeeId = orderDto.EmployeeId,
-                TotalPrice = orderDto.TotalPrice,
-                PurchaseDate = orderDto.PurchaseDate
+                ProductId = order.ProductId,
+                CustomerId = order.CustomerId,
+                EmployeeId = order.EmployeeId,
+                TotalPrice = order.TotalPrice,
+                PurchaseDate = order.PurchaseDate
             };
-            await _orderRepository.UpdateAsync(order);
+            await _orderRepository.UpdateAsync(orders);
         }
 
         public async Task DeleteOrderAsync(int id)
