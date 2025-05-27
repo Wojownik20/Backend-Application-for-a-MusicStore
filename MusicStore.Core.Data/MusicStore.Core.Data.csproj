@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
+    <ProjectReference Include="..\MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
+    <ProjectReference Include="..\MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
