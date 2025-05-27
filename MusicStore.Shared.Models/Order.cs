@@ -1,9 +1,7 @@
 using System;
 namespace MusicStore.Shared.Models;
-public class Order
+public class Order : BaseModel
 {
-
-    public int Id { get; set; }
     public int ProductId { get; set; }
     public int CustomerId { get; set; }
     public int EmployeeId { get; set; }
