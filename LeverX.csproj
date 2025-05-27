@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <NoWarn>1591</NoWarn>
   </PropertyGroup>
 
@@ -16,6 +17,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="MusicStore.Platform.Interfaces\MusicStore.Platform.Interfaces.csproj" />
+    <ProjectReference Include="MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />
+    <ProjectReference Include="MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
+    <ProjectReference Include="MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

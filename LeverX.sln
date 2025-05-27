@@ -4,6 +4,18 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeverX", "LeverX.csproj", "{435C9286-93C3-51AA-B3A2-C927D842E510}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Shared.Models", "MusicStore.Shared.Models\MusicStore.Shared.Models.csproj", "{8CE51966-60D7-4335-8815-D37D2318B16F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Core.Db", "MusicStore.Core.Db\MusicStore.Core.Db.csproj", "{AB4A0B3D-452E-470B-8B92-D5E7EBD24EA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Core.Data", "MusicStore.Core.Data\MusicStore.Core.Data.csproj", "{6B524387-2476-4D62-B22C-A434D13BD2A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Platform.Interfaces", "MusicStore.Platform.Interfaces\MusicStore.Platform.Interfaces.csproj", "{083F650F-2AA6-4995-B2F0-89EFF43C20DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Platform.Services", "MusicStore.Platform.Services\MusicStore.Platform.Services.csproj", "{B363D7E5-9873-4D24-AEB7-24F5EE3549F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Shared.Services.Abstractions", "MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Abstractions.csproj", "{70D670A4-D064-448D-A5D7-CFD413989142}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +26,30 @@ Global
 		{435C9286-93C3-51AA-B3A2-C927D842E510}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{435C9286-93C3-51AA-B3A2-C927D842E510}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{435C9286-93C3-51AA-B3A2-C927D842E510}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE51966-60D7-4335-8815-D37D2318B16F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE51966-60D7-4335-8815-D37D2318B16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE51966-60D7-4335-8815-D37D2318B16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE51966-60D7-4335-8815-D37D2318B16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4A0B3D-452E-470B-8B92-D5E7EBD24EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4A0B3D-452E-470B-8B92-D5E7EBD24EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4A0B3D-452E-470B-8B92-D5E7EBD24EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4A0B3D-452E-470B-8B92-D5E7EBD24EA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B524387-2476-4D62-B22C-A434D13BD2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B524387-2476-4D62-B22C-A434D13BD2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B524387-2476-4D62-B22C-A434D13BD2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B524387-2476-4D62-B22C-A434D13BD2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083F650F-2AA6-4995-B2F0-89EFF43C20DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083F650F-2AA6-4995-B2F0-89EFF43C20DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083F650F-2AA6-4995-B2F0-89EFF43C20DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083F650F-2AA6-4995-B2F0-89EFF43C20DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B363D7E5-9873-4D24-AEB7-24F5EE3549F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B363D7E5-9873-4D24-AEB7-24F5EE3549F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B363D7E5-9873-4D24-AEB7-24F5EE3549F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B363D7E5-9873-4D24-AEB7-24F5EE3549F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D670A4-D064-448D-A5D7-CFD413989142}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D670A4-D064-448D-A5D7-CFD413989142}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D670A4-D064-448D-A5D7-CFD413989142}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D670A4-D064-448D-A5D7-CFD413989142}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

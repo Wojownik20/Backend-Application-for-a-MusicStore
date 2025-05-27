@@ -1,0 +1,54 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using MusicStore.Shared.Services.Abstractions;
+using MusicStore.Core.Db;
+using MusicStore.Shared.Models;
+
+namespace MusicStore.Core.Data
+{
+    public class EmployeeRepository : IEmployeeRepository //Dependency Inversion Principle
+    {
+        private readonly MusicStoreContext _context;
+
+        public EmployeeRepository(MusicStoreContext context) // DB injection, thats what we work on
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Employee>> GetAllAsync()
+        {
+            return await _context.Employees.ToListAsync(); // Async getting list of customers
+        }
+
+        public async Task<Employee> GetByIdAsync(int id)
+        {
+            return await _context.Employees.FindAsync(id);
+        }
+
+        public async Task AddAsync(Employee employee)
+        {
+            await _context.Employees.AddAsync(employee);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Employee employee)
+        {
+            _context.Employees.Update(employee);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee != null)
+            {
+                _context.Employees.Remove(employee);
+                _context.SaveChanges();
+            }
+        }
+    }
+
+
+
+}

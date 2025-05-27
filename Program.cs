@@ -1,7 +1,8 @@
-using LeverX.Application.Interfaces;
-using LeverX.Application.Services;
-using LeverX.Infrastructure.DbContext;
-using LeverX.Infrastructure.Repositories;
+using MusicStore.Shared.Services.Abstractions;
+using MusicStore.Platform.Interfaces;
+using MusicStore.Core.Db;
+using MusicStore.Platform.Services;
+using MusicStore.Core.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

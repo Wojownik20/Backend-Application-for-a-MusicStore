@@ -1,6 +1,6 @@
-﻿using LeverX.Application.Interfaces;
-using LeverX.Application.Services;
-using LeverX.Domain.Models;
+﻿using MusicStore.Shared.Services.Abstractions;
+using MusicStore.Platform.Interfaces;
+using MusicStore.Shared.Models;
 using LeverX.WebAPI.ModelsD;
 using Microsoft.AspNetCore.Mvc;
 
