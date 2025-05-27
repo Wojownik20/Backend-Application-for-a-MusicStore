@@ -18,4 +18,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MusicStore.Platform.Interfaces\MusicStore.Platform.Interfaces.csproj" />
+    <ProjectReference Include="..\MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />
+    <ProjectReference Include="..\MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
+    <ProjectReference Include="..\MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
