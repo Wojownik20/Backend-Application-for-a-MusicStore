@@ -18,64 +18,23 @@ namespace LeverX.Application.Services
             _orderRepository = orderRepository;
         }
 
-        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            var orders = await _orderRepository.GetAllAsync();
-            var orderDtos = orders.Select(o => new OrderDto
-            {
-                ProductId = o.ProductId,
-                CustomerId = o.CustomerId,
-                EmployeeId = o.EmployeeId,
-                TotalPrice = o.TotalPrice,
-                PurchaseDate = o.PurchaseDate
-            });
-            return orderDtos;
+            return await _orderRepository.GetAllAsync();
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByIdAsync(int id)
         {
-            var order = await _orderRepository.GetByIdAsync(id);
-            if (order == null)
-            {
-                return null;
-            }
-            else
-            {
-                return new OrderDto
-                {
-                    ProductId = order.ProductId,
-                    CustomerId = order.CustomerId,
-                    EmployeeId = order.EmployeeId,
-                    TotalPrice = order.TotalPrice,
-                    PurchaseDate = order.PurchaseDate
-                };
-            }
-
+            return await _orderRepository.GetByIdAsync(id);
         }
 
-        public async Task CreateOrderAsync(OrderDto orderDto)
+        public async Task CreateOrderAsync(Order order)
         {
-            var order = new Order
-            {
-                ProductId = orderDto.ProductId,
-                CustomerId = orderDto.CustomerId,
-                EmployeeId = orderDto.EmployeeId,
-                TotalPrice = orderDto.TotalPrice,
-                PurchaseDate = orderDto.PurchaseDate
-            };
             await _orderRepository.AddAsync(order);
         }
 
-        public async Task UpdateOrderAsync(OrderDto orderDto)
+        public async Task UpdateOrderAsync(Order order)
         {
-            var order = new Order
-            {
-                ProductId = orderDto.ProductId,
-                CustomerId = orderDto.CustomerId,
-                EmployeeId = orderDto.EmployeeId,
-                TotalPrice = orderDto.TotalPrice,
-                PurchaseDate = orderDto.PurchaseDate
-            };
             await _orderRepository.UpdateAsync(order);
         }
 

@@ -18,52 +18,24 @@ namespace LeverX.Application.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
+        public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
-            var customers = await _customerRepository.GetAllAsync();
-            var customerDtos = customers.Select(c => new CustomerDto
-            {
-                Name = c.Name,
-                BirthDate = c.BirthDate,
-            });
-            return customerDtos;
+           return await _customerRepository.GetAllAsync();
         }
 
-        public async Task<CustomerDto> GetCustomerByIdAsync(int id)
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            var customer = await _customerRepository.GetByIdAsync(id);
-            if (customer == null)
-            {
-                return null;
-            }
-            else
-            {
-                return new CustomerDto
-                {
-                    Name = customer.Name,
-                    BirthDate = customer.BirthDate
-                };
-            }
+            return await _customerRepository.GetByIdAsync(id);
 
         }
 
-        public async Task CreateCustomerAsync(CustomerDto customerDto)
+        public async Task CreateCustomerAsync(Customer customer)
         {
-            var customer = new Customer
-            {
-                Name = customerDto.Name,
-                BirthDate= customerDto.BirthDate
-            };
             await _customerRepository.AddAsync(customer);
         }
 
-        public async Task UpdateCustomerAsync(CustomerDto customerDto)
+        public async Task UpdateCustomerAsync(Customer customer)
         {
-            var customer = new Customer
-            {
-                Name = customerDto.Name,
-                BirthDate = customerDto.BirthDate
-            };
             await _customerRepository.UpdateAsync(customer);
         }
 

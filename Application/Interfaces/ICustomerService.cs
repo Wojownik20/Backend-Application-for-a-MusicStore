@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LeverX.WebAPI.ModelsD;
+using LeverX.Domain.Models;
 
 namespace LeverX.Application.Interfaces
 {
     public interface ICustomerService // Reminder : Interface is a bunch of essential methods
     {
-        Task<IEnumerable<CustomerDto>> GetAllCustomersAsync();
-        Task<CustomerDto> GetCustomerByIdAsync(int id);
-        Task CreateCustomerAsync (CustomerDto customerDto);
-        Task UpdateCustomerAsync (CustomerDto customerDto);
+        Task<IEnumerable<Customer>> GetAllCustomersAsync();
+        Task<Customer> GetCustomerByIdAsync(int id);
+        Task CreateCustomerAsync (Customer customer);
+        Task UpdateCustomerAsync (Customer customer);
         Task DeleteCustomerAsync (int id);  
     }
 }

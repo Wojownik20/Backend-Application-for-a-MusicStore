@@ -23,8 +23,15 @@ public class ProductController : ControllerBase //Base class
     [HttpGet] // GET /api/product
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var product = await _productService.GetAllProductsAsync();
-        return Ok(product); // return 200 OK 
+        var products = await _productService.GetAllProductsAsync();
+        var productDtos = products.Select(p => new ProductDto
+        {
+            Name = p.Name,
+            Category = p.Category,
+            Price = p.Price,
+            ReleaseDate = p.ReleaseDate
+        });
+        return Ok(productDtos);
     }
 
     /// <summary>
@@ -38,10 +45,16 @@ public class ProductController : ControllerBase //Base class
         var product = await _productService.GetProductByIdAsync(id);
         if (product == null)
             return NotFound();
-        else
+
+        var productDto = new ProductDto
         {
-            return Ok(product); //200 Ok
-        }
+            Name = product.Name,
+            Category = product.Category,
+            Price = product.Price,
+            ReleaseDate = product.ReleaseDate
+        };
+
+        return Ok(productDto);
     }
 
     /// <summary>
@@ -52,7 +65,15 @@ public class ProductController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create(ProductDto productDto)
     {
-        await _productService.CreateProductAsync(productDto);
+        var product = new Product
+        {
+            Name = productDto.Name,
+            Category = productDto.Category,
+            Price = productDto.Price,
+            ReleaseDate = productDto.ReleaseDate
+        };
+
+        await _productService.CreateProductAsync(product);
         return Ok();
     }
 
@@ -65,10 +86,16 @@ public class ProductController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(ProductDto productDto)
     {
+        var product = new Product
+        {
+            Name = productDto.Name,
+            Category = productDto.Category,
+            Price = productDto.Price,
+            ReleaseDate = productDto.ReleaseDate
+        };
 
-        await _productService.UpdateProductAsync(productDto);
+        await _productService.UpdateProductAsync(product);
         return Ok();
-
     }
 
     /// <summary>

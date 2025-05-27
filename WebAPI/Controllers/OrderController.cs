@@ -23,8 +23,16 @@ public class OrderController : ControllerBase //Base class
     [HttpGet]
     public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var order = await _orderService.GetAllOrdersAsync();
-        return Ok(order); // return 200 OK 
+        var orders = await _orderService.GetAllOrdersAsync();
+        var orderDtos = orders.Select(o => new OrderDto
+        {
+            ProductId = o.ProductId,
+            CustomerId = o.CustomerId,
+            EmployeeId = o.EmployeeId,
+            TotalPrice = o.TotalPrice,
+            PurchaseDate = o.PurchaseDate
+        });
+        return Ok(orderDtos);
     }
 
     /// <summary>
@@ -38,10 +46,17 @@ public class OrderController : ControllerBase //Base class
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
             return NotFound();
-        else
+
+        var orders = new OrderDto
         {
-            return Ok(order); //200 Ok
-        }
+            ProductId = order.ProductId,
+            CustomerId = order.CustomerId,
+            EmployeeId = order.EmployeeId,
+            TotalPrice = order.TotalPrice,
+            PurchaseDate = order.PurchaseDate
+        };
+
+        return Ok(orders);
     }
 
     /// <summary>
@@ -52,7 +67,16 @@ public class OrderController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create(OrderDto orderDto)
     {
-        await _orderService.CreateOrderAsync(orderDto);
+        var orders = new Order
+        {
+            ProductId = orderDto.ProductId,
+            CustomerId = orderDto.CustomerId,
+            EmployeeId = orderDto.EmployeeId,
+            TotalPrice = orderDto.TotalPrice,
+            PurchaseDate = orderDto.PurchaseDate
+        };
+
+        await _orderService.CreateOrderAsync(orders);
         return Ok();
     }
 
@@ -65,10 +89,17 @@ public class OrderController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(OrderDto orderDto)
     {
+        var orders = new Order
+        {
+            ProductId = orderDto.ProductId,
+            CustomerId = orderDto.CustomerId,
+            EmployeeId = orderDto.EmployeeId,
+            TotalPrice = orderDto.TotalPrice,
+            PurchaseDate = orderDto.PurchaseDate
+        };
 
-        await _orderService.UpdateOrderAsync(orderDto);
+        await _orderService.UpdateOrderAsync(orders);
         return Ok();
-
     }
 
     /// <summary>

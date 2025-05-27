@@ -25,7 +25,13 @@ public class EmployeeController : ControllerBase //Base class
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAllAsync() // WebAPI changed for Db
     {
         var employees = await _employeeService.GetAllEmployeesAsync();
-        return Ok(employees); // return 200 OK 
+        var employeeDtos = employees.Select(e => new EmployeeDto
+        {
+            Name = e.Name,
+            BirthDate = e.BirthDate,
+            Salary = e.Salary
+        });
+        return Ok(employeeDtos);
     }
 
     /// <summary>
@@ -39,10 +45,15 @@ public class EmployeeController : ControllerBase //Base class
         var employee = await _employeeService.GetEmployeeByIdAsync(id);
         if (employee == null)
             return NotFound();
-        else
+
+        var employeeDto = new EmployeeDto
         {
-            return Ok(employee); //200 Ok
-        }
+            Name = employee.Name,
+            BirthDate = employee.BirthDate,
+            Salary = employee.Salary
+        };
+
+        return Ok(employeeDto);
     }
 
     /// <summary>
@@ -53,7 +64,14 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create(EmployeeDto employeeDto)
     {
-        await _employeeService.CreateEmployeeAsync(employeeDto);
+        var employee = new Employee
+        {
+            Name = employeeDto.Name,
+            BirthDate = employeeDto.BirthDate,
+            Salary = employeeDto.Salary
+        };
+
+        await _employeeService.CreateEmployeeAsync(employee);
         return Ok();
     }
 
@@ -66,10 +84,15 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(EmployeeDto employeeDto)
     {
+        var employee = new Employee
+        {
+            Name = employeeDto.Name,
+            BirthDate = employeeDto.BirthDate,
+            Salary = employeeDto.Salary
+        };
 
-        await _employeeService.UpdateEmployeeAsync(employeeDto);
+        await _employeeService.UpdateEmployeeAsync(employee);
         return Ok();
-
     }
 
     /// <summary>

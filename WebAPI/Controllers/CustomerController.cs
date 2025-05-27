@@ -25,7 +25,12 @@ public class CustomerController : ControllerBase //Base class
     public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllAsync() // WebAPI changed for Db
     {
         var customers = await _customerService.GetAllCustomersAsync();
-        return Ok(customers); // return 200 OK 
+        var customerDtos = customers.Select(c => new CustomerDto
+        {
+            Name = c.Name,
+            BirthDate = c.BirthDate
+        });
+        return Ok(customerDtos);
     }
 
     /// <summary>
@@ -40,9 +45,7 @@ public class CustomerController : ControllerBase //Base class
         if (customer == null)
             return NotFound();
         else
-        {
-            return Ok(customer); //200 Ok
-        }
+            return Ok(customer);
     }
 
     /// <summary>
@@ -53,7 +56,13 @@ public class CustomerController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create(CustomerDto customerDto)
     {
-        await _customerService.CreateCustomerAsync(customerDto);
+        var customer = new Customer
+        {
+            Name = customerDto.Name,
+            BirthDate = customerDto.BirthDate
+        };
+
+        await _customerService.CreateCustomerAsync(customer);
         return Ok();
     }
 
@@ -64,18 +73,23 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="updatedCustomer">updated customer record</param>
     /// <returns>204 if customer updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(CustomerDto customerDto) {
-        
-            await _customerService.UpdateCustomerAsync(customerDto);
-            return Ok();
-        
+    public async Task<IActionResult> Update(CustomerDto customerDto)
+    {
+        var customer = new Customer
+        {
+            Name = customerDto.Name,
+            BirthDate = customerDto.BirthDate
+        };
+
+        await _customerService.UpdateCustomerAsync(customer);
+        return Ok();
     }
-        /// <summary>
-        /// Deletion of customer
-        /// </summary>
-        /// <param name="id">id of the customer</param>
-        /// <returns>204 if customer deleted, 404 if id not found</returns>
-        [HttpDelete("{id}")]
+    /// <summary>
+    /// Deletion of customer
+    /// </summary>
+    /// <param name="id">id of the customer</param>
+    /// <returns>204 if customer deleted, 404 if id not found</returns>
+    [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) {
             await _customerService.DeleteCustomerAsync(id);
             return Ok();
