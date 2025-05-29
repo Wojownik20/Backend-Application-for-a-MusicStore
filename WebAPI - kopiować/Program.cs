@@ -24,19 +24,9 @@ builder.Services.AddDbContext<MusicStoreContext>(options =>
 
 //Repositories and Services
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderService, OrderService>();
 
-
-
-
-
+builder.Services.RegisterPlatformServices();
+builder.Services.RegisterPlatformRepositories();
 
 var app = builder.Build();
 
