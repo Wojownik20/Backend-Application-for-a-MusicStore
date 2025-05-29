@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Shared.Models;
+using MusicStore.Core.Data;
 
 namespace MusicStore.Core.Db;
 

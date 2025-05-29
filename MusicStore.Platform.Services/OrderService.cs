@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MusicStore.Shared.Models;
-using System.Diagnostics.Eventing.Reader;
-using MusicStore.Platform.Interfaces;
-using MusicStore.Shared.Services.Abstractions;
+using MusicStore.Platform.Services.Interfaces;
+using MusicStore.Core.Data;
+using MusicStore.Platform.Repositories.Interfaces;
 
 namespace MusicStore.Platform.Services
 {

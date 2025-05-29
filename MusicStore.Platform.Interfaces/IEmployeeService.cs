@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MusicStore.Shared.Models;
+using MusicStore.Core.Data;
 
-namespace MusicStore.Platform.Interfaces
+namespace MusicStore.Platform.Services.Interfaces
 {
     public interface IEmployeeService // Reminder : Interface is a bunch of essential methods
     {

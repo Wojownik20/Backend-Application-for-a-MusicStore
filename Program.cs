@@ -1,8 +1,9 @@
-using MusicStore.Shared.Services.Abstractions;
-using MusicStore.Platform.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories;
 using MusicStore.Core.Db;
+using MusicStore.Platform.Services.Interfaces;  
 using MusicStore.Platform.Services;
-using MusicStore.Core.Data;
+using MusicStore.Platform.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,16 +23,15 @@ builder.Services.AddDbContext<MusicStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //Connection to DataBase
 
 //Repositories and Services
-builder.Services.AddScoped<ICustomerService, CustomerService>();
+
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
-
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 
 

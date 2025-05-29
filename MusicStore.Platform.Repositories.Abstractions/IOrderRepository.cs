@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MusicStore.Shared.Models;
+using MusicStore.Core.Data;
 
-namespace MusicStore.Shared.Services.Abstractions
+namespace MusicStore.Platform.Repositories.Interfaces
 {
     public interface IOrderRepository // This guy is the one and only talking to the DB
     {

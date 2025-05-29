@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Shared.Services.Abstractions;
+using MusicStore.Platform.Repositories.Interfaces;
 using MusicStore.Core.Db;
-using MusicStore.Shared.Models;
+using MusicStore.Core.Data;
 
-namespace MusicStore.Core.Data
+
+namespace MusicStore.Platform.Repositories
 {
     public class ProductRepository : IProductRepository //Dependency Inversion Principle
     {

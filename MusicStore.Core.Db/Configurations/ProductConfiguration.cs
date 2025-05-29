@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MusicStore.Shared.Models;
+using MusicStore.Core.Data;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {

@@ -1,5 +1,6 @@
 ﻿using System;
-namespace MusicStore.Shared.Models;
+using MusicStore.Shared.Models;
+namespace MusicStore.Core.Data;
 public class Product : BaseModel
 {
 		public string Name { get; set; }
