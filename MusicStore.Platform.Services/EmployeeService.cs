@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
-using MusicStore.Core.Data;
 using MusicStore.Platform.Repositories.Interfaces;
 
 namespace MusicStore.Platform.Services

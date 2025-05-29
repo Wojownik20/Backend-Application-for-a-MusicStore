@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicStore.Core.Data\MusicStore.Core.Data.csproj" />
-    <ProjectReference Include="..\MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
   </ItemGroup>
 
 </Project>

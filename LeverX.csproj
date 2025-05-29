@@ -10,6 +10,45 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MusicStore.Core.Data\**" />
+    <Compile Remove="MusicStore.Core.Db\**" />
+    <Compile Remove="MusicStore.Platform.Interfaces\**" />
+    <Compile Remove="MusicStore.Platform.Repositories.Abstractions\**" />
+    <Compile Remove="MusicStore.Platform.Repositories\**" />
+    <Compile Remove="MusicStore.Platform.Services\**" />
+    <Compile Remove="MusicStore.Shared.Models\**" />
+    <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <Compile Remove="WebAPI\**" />
+    <Content Remove="MusicStore.Core.Data\**" />
+    <Content Remove="MusicStore.Core.Db\**" />
+    <Content Remove="MusicStore.Platform.Interfaces\**" />
+    <Content Remove="MusicStore.Platform.Repositories.Abstractions\**" />
+    <Content Remove="MusicStore.Platform.Repositories\**" />
+    <Content Remove="MusicStore.Platform.Services\**" />
+    <Content Remove="MusicStore.Shared.Models\**" />
+    <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <Content Remove="WebAPI\**" />
+    <EmbeddedResource Remove="MusicStore.Core.Data\**" />
+    <EmbeddedResource Remove="MusicStore.Core.Db\**" />
+    <EmbeddedResource Remove="MusicStore.Platform.Interfaces\**" />
+    <EmbeddedResource Remove="MusicStore.Platform.Repositories.Abstractions\**" />
+    <EmbeddedResource Remove="MusicStore.Platform.Repositories\**" />
+    <EmbeddedResource Remove="MusicStore.Platform.Services\**" />
+    <EmbeddedResource Remove="MusicStore.Shared.Models\**" />
+    <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <EmbeddedResource Remove="WebAPI\**" />
+    <None Remove="MusicStore.Core.Data\**" />
+    <None Remove="MusicStore.Core.Db\**" />
+    <None Remove="MusicStore.Platform.Interfaces\**" />
+    <None Remove="MusicStore.Platform.Repositories.Abstractions\**" />
+    <None Remove="MusicStore.Platform.Repositories\**" />
+    <None Remove="MusicStore.Platform.Services\**" />
+    <None Remove="MusicStore.Shared.Models\**" />
+    <None Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <None Remove="WebAPI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,10 +59,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="MusicStore.Core.Data\MusicStore.Core.Data.csproj" />
+    <ProjectReference Include="MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
     <ProjectReference Include="MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
+    <ProjectReference Include="MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
+    <ProjectReference Include="MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj" />
     <ProjectReference Include="MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />
     <ProjectReference Include="MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
-    <ProjectReference Include="MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

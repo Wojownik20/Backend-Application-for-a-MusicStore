@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicStore.Core.Data\MusicStore.Core.Data.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
