@@ -69,6 +69,22 @@ public class OrderController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] OrderDto orderDto)
     {
+        var customer = await _orderService.GetOrderByIdAsync(orderDto.CustomerId);
+        if(customer == null)
+        {
+            return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
+        }
+        var product = await _orderService.GetOrderByIdAsync(orderDto.ProductId);
+        if(product==null)
+        {
+            return NotFound($"Product with ID {orderDto.ProductId} not found.");
+        }
+        var employee = await _orderService.GetOrderByIdAsync(orderDto.EmployeeId);
+        if(employee==null)
+        {
+            return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
+        }
+
         var orders = new Order
         {
             ProductId = orderDto.ProductId,
@@ -91,6 +107,22 @@ public class OrderController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
+        var customer = await _orderService.GetOrderByIdAsync(orderDto.CustomerId);
+        if (customer == null)
+        {
+            return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
+        }
+        var product = await _orderService.GetOrderByIdAsync(orderDto.ProductId);
+        if (product == null)
+        {
+            return NotFound($"Product with ID {orderDto.ProductId} not found.");
+        }
+        var employee = await _orderService.GetOrderByIdAsync(orderDto.EmployeeId);
+        if (employee==null)
+        {
+            return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
+        }
+
         var orders = new Order
         {
             Id=id,
