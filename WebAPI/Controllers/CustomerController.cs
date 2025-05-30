@@ -80,7 +80,7 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="updatedCustomer">updated customer record</param>
     /// <returns>204 if customer updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromBody] CustomerDto customerDto)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
         var customer = new Customer
         {

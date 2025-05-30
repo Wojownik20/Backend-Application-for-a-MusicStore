@@ -90,7 +90,6 @@ public class ProductController : ControllerBase //Base class
     {
         var product = new Product
         {
-            Id=id,
             Name = productDto.Name,
             Category = productDto.Category,
             Price = productDto.Price,

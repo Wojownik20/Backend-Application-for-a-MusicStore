@@ -88,7 +88,6 @@ public class EmployeeController : ControllerBase //Base class
     {
         var employee = new Employee
         {
-            Id = id,
             Name = employeeDto.Name,
             BirthDate = employeeDto.BirthDate,
             Salary = employeeDto.Salary

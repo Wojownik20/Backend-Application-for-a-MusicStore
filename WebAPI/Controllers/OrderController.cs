@@ -125,7 +125,6 @@ public class OrderController : ControllerBase //Base class
 
         var orders = new Order
         {
-            Id=id,
             ProductId = orderDto.ProductId,
             CustomerId = orderDto.CustomerId,
             EmployeeId = orderDto.EmployeeId,
