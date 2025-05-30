@@ -18,7 +18,6 @@
     <Compile Remove="MusicStore.Platform.Services\**" />
     <Compile Remove="MusicStore.Shared.Models\**" />
     <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
-    <Compile Remove="WebAPI\**" />
     <Content Remove="MusicStore.Core.Data\**" />
     <Content Remove="MusicStore.Core.Db\**" />
     <Content Remove="MusicStore.Platform.Interfaces\**" />
@@ -27,7 +26,6 @@
     <Content Remove="MusicStore.Platform.Services\**" />
     <Content Remove="MusicStore.Shared.Models\**" />
     <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
-    <Content Remove="WebAPI\**" />
     <EmbeddedResource Remove="MusicStore.Core.Data\**" />
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Interfaces\**" />
@@ -36,7 +34,6 @@
     <EmbeddedResource Remove="MusicStore.Platform.Services\**" />
     <EmbeddedResource Remove="MusicStore.Shared.Models\**" />
     <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
-    <EmbeddedResource Remove="WebAPI\**" />
     <None Remove="MusicStore.Core.Data\**" />
     <None Remove="MusicStore.Core.Db\**" />
     <None Remove="MusicStore.Platform.Interfaces\**" />
@@ -45,7 +42,6 @@
     <None Remove="MusicStore.Platform.Services\**" />
     <None Remove="MusicStore.Shared.Models\**" />
     <None Remove="MusicStore.Shared.Services.Abstractions\**" />
-    <None Remove="WebAPI\**" />
   </ItemGroup>
 
   <ItemGroup>
