@@ -61,11 +61,10 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="newCustomer">New customer</param>
     /// <returns>201 when a new customer is created</returns>
     [HttpPost]
-    public async Task<IActionResult> Create([FromRoute] int id, [FromBody] CustomerDto customerDto)
+    public async Task<IActionResult> Create([FromBody] CustomerDto customerDto)
     {
         var customer = new Customer
         {
-            Id=id,
             Name = customerDto.Name,
             BirthDate = customerDto.BirthDate
         };
