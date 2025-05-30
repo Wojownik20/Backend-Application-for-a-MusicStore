@@ -28,7 +28,7 @@ namespace MusicStore.Platform.Repositories
 
         public async Task<int> AddAsync(Customer customer)
         {
-            _context.Customers.AddAsync(customer);
+           await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
             return customer.Id;
         }

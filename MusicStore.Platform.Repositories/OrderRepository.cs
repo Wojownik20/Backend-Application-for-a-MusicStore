@@ -28,7 +28,7 @@ namespace MusicStore.Platform.Repositories
 
         public async Task<int> AddAsync(Order order)
         {
-            _context.Orders.AddAsync(order);
+            await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
             return order.Id;
         }

@@ -29,7 +29,7 @@ namespace MusicStore.Platform.Repositories
 
         public async Task<int> AddAsync(Product product)
         {
-            _context.Products.AddAsync(product);
+            await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return product.Id;
         }
