@@ -1,7 +1,7 @@
 ﻿using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Core.Data;
 using MusicStore.Shared.Models;
-using LeverX.WebAPI.ModelsD;
+using LeverX.WebAPI.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeverX.WebAPI.Controllers;

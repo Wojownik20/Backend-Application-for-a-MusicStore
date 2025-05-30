@@ -30,14 +30,16 @@ namespace MusicStore.Platform.Services
 
         }
 
-        public async Task CreateCustomerAsync(Customer customer)
+        public async Task<int> CreateCustomerAsync(Customer customer)
         {
             await _customerRepository.AddAsync(customer);
+            return customer.Id;
         }
 
-        public async Task UpdateCustomerAsync(Customer customer)
+        public async Task<int> UpdateCustomerAsync(Customer customer)
         {
             await _customerRepository.UpdateAsync(customer);
+            return customer.Id;
         }
 
         public async Task DeleteCustomerAsync(int id)

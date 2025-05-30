@@ -8,7 +8,7 @@ public interface IEmployeeRepository // This guy is the one and only talking to 
 {
     Task<IEnumerable<Employee>> GetAllAsync();
     Task<Employee> GetByIdAsync(int id);
-    Task AddAsync(Employee employee);
-    Task UpdateAsync(Employee employee);
+    Task<int> AddAsync(Employee employee);
+    Task<int> UpdateAsync(Employee employee);
     Task DeleteAsync(int id);
 }

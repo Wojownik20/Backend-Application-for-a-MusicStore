@@ -8,8 +8,8 @@ namespace MusicStore.Platform.Repositories.Interfaces
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> GetByIdAsync(int id);
-        Task AddAsync(Product product);
-        Task UpdateAsync(Product product);
+        Task<int> AddAsync(Product product);
+        Task<int> UpdateAsync(Product product);
         Task DeleteAsync(int id);
     }
 

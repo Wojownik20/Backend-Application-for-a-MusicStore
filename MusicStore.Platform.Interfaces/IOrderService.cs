@@ -8,8 +8,8 @@ namespace MusicStore.Platform.Services.Interfaces
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
-        Task CreateOrderAsync(Order order);
-        Task UpdateOrderAsync(Order order);
+        Task<int> CreateOrderAsync(Order order);
+        Task<int> UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(int id);
     }
 }

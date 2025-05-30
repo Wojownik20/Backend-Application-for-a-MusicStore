@@ -28,14 +28,16 @@ namespace MusicStore.Platform.Services
             return await _productRepository.GetByIdAsync(id);
         }
 
-        public async Task CreateProductAsync(Product product)
+        public async Task<int> CreateProductAsync(Product product)
         {
             await _productRepository.AddAsync(product);
+            return product.Id; 
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task<int> UpdateProductAsync(Product product)
         { 
            await _productRepository.UpdateAsync(product);
+            return product.Id;
         }
 
         public async Task DeleteProductAsync(int id)

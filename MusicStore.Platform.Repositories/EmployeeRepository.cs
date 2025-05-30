@@ -26,16 +26,18 @@ namespace MusicStore.Platform.Repositories
             return await _context.Employees.FindAsync(id);
         }
 
-        public async Task AddAsync(Employee employee)
+        public async Task<int> AddAsync(Employee employee)
         {
-            await _context.Employees.AddAsync(employee);
+            _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
+            return employee.Id;
         }
 
-        public async Task UpdateAsync(Employee employee)
+        public async Task<int> UpdateAsync(Employee employee)
         {
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
+            return employee.Id;
         }
 
         public async Task DeleteAsync(int id)

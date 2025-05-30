@@ -28,14 +28,16 @@ namespace MusicStore.Platform.Services
             return await _orderRepository.GetByIdAsync(id);
         }
 
-        public async Task CreateOrderAsync(Order order)
+        public async Task<int> CreateOrderAsync(Order order)
         {
             await _orderRepository.AddAsync(order);
+            return order.Id;
         }
 
-        public async Task UpdateOrderAsync(Order order)
+        public async Task<int> UpdateOrderAsync(Order order)
         {
             await _orderRepository.UpdateAsync(order);
+            return order.Id;
         }
 
         public async Task DeleteOrderAsync(int id)

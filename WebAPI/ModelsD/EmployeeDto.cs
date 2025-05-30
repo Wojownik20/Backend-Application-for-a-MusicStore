@@ -1,5 +1,5 @@
 using System;
-namespace LeverX.WebAPI.ModelsD;
+namespace LeverX.WebAPI.ModelsDto;
 public class EmployeeDto
 {
     public string? Name { get; set; }

@@ -23,14 +23,16 @@ namespace MusicStore.Platform.Services
         {
             return await _employeeRepository.GetByIdAsync(id); // Async getting list of customers
         }
-        public async Task CreateEmployeeAsync(Employee employee)
+        public async Task<int> CreateEmployeeAsync(Employee employee)
         {
             await _employeeRepository.AddAsync(employee);
+            return employee.Id;
         }
 
-        public async Task UpdateEmployeeAsync(Employee employee)
+        public async Task<int> UpdateEmployeeAsync(Employee employee)
         {
             await _employeeRepository.UpdateAsync(employee);
+            return employee.Id;
         }
 
         public async Task DeleteEmployeeAsync(int id)
