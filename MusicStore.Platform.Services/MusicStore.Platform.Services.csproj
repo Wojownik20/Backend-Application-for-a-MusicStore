@@ -17,7 +17,6 @@
     <ProjectReference Include="..\MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
-    <ProjectReference Include="..\MusicStore.Shared.Services.Abstractions\MusicStore.Shared.Services.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
