@@ -22,11 +22,12 @@ public class CustomerController : ControllerBase //Base class
     /// </summary>
     /// <returns>200 OK and JSON list of customers</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllAsync() // WebAPI changed for Db
+    public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
         var customers = await _customerService.GetAllCustomersAsync();
-        var customerDtos = customers.Select(c => new CustomerDto
+        var customerDtos = customers.Select(c => new CustomerReadDto
         {
+            Id=c.Id,
             Name = c.Name,
             BirthDate = c.BirthDate
         });
@@ -39,13 +40,19 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="id">Id of an customer</param>
     /// <returns>200 if Customer found, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<CustomerDto>> GetById(int id)
+    public async Task<ActionResult<CustomerReadDto>> GetById([FromRoute] int id)
     {
         var customer = await _customerService.GetCustomerByIdAsync(id);
         if (customer == null)
             return NotFound();
-        else
-            return Ok(customer);
+
+        var customerDto = new CustomerReadDto
+        {
+            Id = customer.Id,
+            Name = customer.Name,
+            BirthDate = customer.BirthDate
+        };
+        return Ok(customer);
     }
 
     /// <summary>
@@ -54,10 +61,11 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="newCustomer">New customer</param>
     /// <returns>201 when a new customer is created</returns>
     [HttpPost]
-    public async Task<IActionResult> Create(CustomerDto customerDto)
+    public async Task<IActionResult> Create([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
         var customer = new Customer
         {
+            Id=id,
             Name = customerDto.Name,
             BirthDate = customerDto.BirthDate
         };
@@ -73,7 +81,7 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="updatedCustomer">updated customer record</param>
     /// <returns>204 if customer updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(CustomerDto customerDto)
+    public async Task<IActionResult> Update([FromBody] CustomerDto customerDto)
     {
         var customer = new Customer
         {
@@ -90,7 +98,7 @@ public class CustomerController : ControllerBase //Base class
     /// <param name="id">id of the customer</param>
     /// <returns>204 if customer deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) {
+        public async Task<IActionResult> Delete([FromRoute] int id) {
             await _customerService.DeleteCustomerAsync(id);
             return Ok();
         }

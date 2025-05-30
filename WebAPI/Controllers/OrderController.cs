@@ -21,11 +21,12 @@ public class OrderController : ControllerBase //Base class
     /// </summary>
     /// <returns>200 and JSON list of Orders</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync() // WebAPI changed for Db
+    public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
         var orders = await _orderService.GetAllOrdersAsync();
-        var orderDtos = orders.Select(o => new OrderDto
+        var orderDtos = orders.Select(o => new OrderReadDto
         {
+            Id = o.Id, 
             ProductId = o.ProductId,
             CustomerId = o.CustomerId,
             EmployeeId = o.EmployeeId,
@@ -41,14 +42,15 @@ public class OrderController : ControllerBase //Base class
     /// <param name="id">Id of Order</param>
     /// <returns>200 and a order, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrderDto>> GetById(int id)
+    public async Task<ActionResult<OrderReadDto>> GetById([FromRoute] int id)
     {
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
             return NotFound();
 
-        var orders = new OrderDto
+        var orders = new OrderReadDto
         {
+            Id = order.Id,
             ProductId = order.ProductId,
             CustomerId = order.CustomerId,
             EmployeeId = order.EmployeeId,
@@ -65,7 +67,7 @@ public class OrderController : ControllerBase //Base class
     /// <param name="newOrder">New order</param>
     /// <returns>201 when order created</returns>
     [HttpPost]
-    public async Task<IActionResult> Create(OrderDto orderDto)
+    public async Task<IActionResult> Create([FromBody] OrderDto orderDto)
     {
         var orders = new Order
         {
@@ -87,10 +89,11 @@ public class OrderController : ControllerBase //Base class
     /// <param name="updatedOrder">Updated order</param>
     /// <returns>204 if Order updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(OrderDto orderDto)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
         var orders = new Order
         {
+            Id=id,
             ProductId = orderDto.ProductId,
             CustomerId = orderDto.CustomerId,
             EmployeeId = orderDto.EmployeeId,
@@ -108,7 +111,7 @@ public class OrderController : ControllerBase //Base class
     /// <param name="id">id of the order</param>
     /// <returns>204 if order deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         await _orderService.DeleteOrderAsync(id);
         return Ok();

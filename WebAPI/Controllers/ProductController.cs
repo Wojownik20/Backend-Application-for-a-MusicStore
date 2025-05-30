@@ -21,11 +21,12 @@ public class ProductController : ControllerBase //Base class
     /// </summary>
     /// <returns>200 and JSON list of products</returns>
     [HttpGet] // GET /api/product
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllAsync() // WebAPI changed for Db
+    public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
         var products = await _productService.GetAllProductsAsync();
-        var productDtos = products.Select(p => new ProductDto
+        var productDtos = products.Select(p => new ProductReadDto
         {
+            Id=p.Id,
             Name = p.Name,
             Category = p.Category,
             Price = p.Price,
@@ -40,14 +41,15 @@ public class ProductController : ControllerBase //Base class
     /// <param name="id">Product ID</param>
     /// <returns>Product or Error 404</returns>
     [HttpGet("{id}")] // GET api/product/{id}
-    public async Task<ActionResult<ProductDto>> GetById(int id)
+    public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] int id)
     {
         var product = await _productService.GetProductByIdAsync(id);
         if (product == null)
             return NotFound();
 
-        var productDto = new ProductDto
+        var productDto = new ProductReadDto
         {
+            Id = product.Id,
             Name = product.Name,
             Category = product.Category,
             Price = product.Price,
@@ -63,7 +65,7 @@ public class ProductController : ControllerBase //Base class
     /// <param name="newProduct">New Product</param>
     /// <returns>201 + Link to get api/product</returns>
     [HttpPost]
-    public async Task<IActionResult> Create(ProductDto productDto)
+    public async Task<IActionResult> Create([FromBody] ProductDto productDto)
     {
         var product = new Product
         {
@@ -84,10 +86,11 @@ public class ProductController : ControllerBase //Base class
     /// <param name="updatedProduct">Updated product</param>
     /// <returns>204 if product updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(ProductDto productDto)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductDto productDto)
     {
         var product = new Product
         {
+            Id=id,
             Name = productDto.Name,
             Category = productDto.Category,
             Price = productDto.Price,
@@ -104,7 +107,7 @@ public class ProductController : ControllerBase //Base class
     /// <param name="id">Id of product</param>
     /// <returns>204 if product deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         await _productService.DeleteProductAsync(id);
         return Ok();
