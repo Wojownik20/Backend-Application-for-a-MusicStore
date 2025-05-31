@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeverX", "LeverX.csproj", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Core.Data", "MusicStore.Core.Data\MusicStore.Core.Data.csproj", "{80717973-E66F-F479-94D8-E107716577C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Core.Db", "MusicStore.Core.Db\MusicStore.Core.Db.csproj", "{CED580E8-2977-B4AE-5BEA-535CD7DAEFE5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Platform.Services.Interfaces", "MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj", "{6D383778-D67F-77BE-2472-407B461E336D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Platform.Repositories", "MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj", "{3E71C054-5034-728E-5D33-43407D647D13}"
@@ -32,10 +30,6 @@ Global
 		{80717973-E66F-F479-94D8-E107716577C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80717973-E66F-F479-94D8-E107716577C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80717973-E66F-F479-94D8-E107716577C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CED580E8-2977-B4AE-5BEA-535CD7DAEFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CED580E8-2977-B4AE-5BEA-535CD7DAEFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CED580E8-2977-B4AE-5BEA-535CD7DAEFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CED580E8-2977-B4AE-5BEA-535CD7DAEFE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D383778-D67F-77BE-2472-407B461E336D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D383778-D67F-77BE-2472-407B461E336D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D383778-D67F-77BE-2472-407B461E336D}.Release|Any CPU.ActiveCfg = Release|Any CPU

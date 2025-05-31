@@ -1,53 +1,53 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using MusicStore.Platform.Repositories.Interfaces;
-using MusicStore.Core.Db;
+using Dapper;
 using MusicStore.Core.Data;
+using MusicStore.Core.Db;
+using MusicStore.Platform.Repositories.Interfaces;
 
 namespace MusicStore.Platform.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository //Dependency Inversion Principle
     {
-        private readonly MusicStoreContext _context;
+        private readonly IDbConnection _dbConnection;
 
-        public EmployeeRepository(MusicStoreContext context) // DB injection, thats what we work on
+        public EmployeeRepository(IDbConnection DbConnection) // DB injection, thats what we work on
         {
-            _context = context;
+            _dbConnection = DbConnection;
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
-            return await _context.Employees.ToListAsync(); // Async getting list of customers
+            var sql = "SELECT * FROM Employees";
+            return await _dbConnection.QueryAsync<Employee>(sql);
         }
 
         public async Task<Employee> GetByIdAsync(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            var sql = "SELECT * FROM Employees WHERE Id = @Id";
+            return await _dbConnection.QueryFirstOrDefaultAsync<Employee>(sql, new { Id = id });
         }
 
         public async Task<int> AddAsync(Employee employee)
         {
-            await _context.Employees.AddAsync(employee);
-            await _context.SaveChangesAsync();
-            return employee.Id;
+            var sql = "INSERT INTO Employees (Name, BirthDate, Salary) VALUES (@Name, @BirthDate, @Salary); SELECT CAST(SCOPE_IDENTITY() as int)";
+            var newSql = await _dbConnection.QuerySingleAsync<int>(sql, employee);
+            return newSql; 
         }
 
         public async Task<int> UpdateAsync(Employee employee)
         {
-            _context.Employees.Update(employee);
-            await _context.SaveChangesAsync();
+            var sql = "UPDATE Employees SET Name = @Name, BirthDate = @BirthDate, Salary = @Salary WHERE Id = @Id";
+            await _dbConnection.ExecuteAsync(sql, employee);
             return employee.Id;
         }
 
         public async Task DeleteAsync(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
-            }
+            var sql = "DELETE FROM Employees WHERE Id = @Id";
+            await _dbConnection.ExecuteAsync(sql, new { Id = id });
         }
     }
 

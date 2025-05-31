@@ -86,15 +86,23 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
     {
-        var employee = new Employee
+        var isEmployee = await _employeeService.GetEmployeeByIdAsync(id);
+        if(isEmployee==null)
         {
-            Name = employeeDto.Name,
-            BirthDate = employeeDto.BirthDate,
-            Salary = employeeDto.Salary
-        };
+            return NotFound(); 
+        }
+        else
+        {
+            var employee = new Employee
+            {
+                Name = employeeDto.Name,
+                BirthDate = employeeDto.BirthDate,
+                Salary = employeeDto.Salary
+            };
 
-        await _employeeService.UpdateEmployeeAsync(employee);
-        return Ok();
+            await _employeeService.UpdateEmployeeAsync(employee);
+            return Ok();
+        }
     }
 
     /// <summary>
@@ -105,7 +113,15 @@ public class EmployeeController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _employeeService.DeleteEmployeeAsync(id);
-        return Ok();
+        var isEmployee = await _employeeService.GetEmployeeByIdAsync(id);
+        if(isEmployee == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            await _employeeService.DeleteEmployeeAsync(id);
+            return Ok();
+        }
     }
 }

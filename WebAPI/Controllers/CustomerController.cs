@@ -82,14 +82,22 @@ public class CustomerController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
-        var customer = new Customer
+        var isCustomer = await _customerService.GetCustomerByIdAsync(id);
+        if(isCustomer==null)
         {
-            Name = customerDto.Name,
-            BirthDate = customerDto.BirthDate
-        };
+            return NotFound();
+        }
+        else
+        {
+            var customer = new Customer
+            {
+                Name = customerDto.Name,
+                BirthDate = customerDto.BirthDate
+            };
 
-        await _customerService.UpdateCustomerAsync(customer);
-        return Ok();
+            await _customerService.UpdateCustomerAsync(customer);
+            return Ok();
+        }
     }
     /// <summary>
     /// Deletion of customer
@@ -98,8 +106,16 @@ public class CustomerController : ControllerBase //Base class
     /// <returns>204 if customer deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id) {
+        var customer = await _customerService.GetCustomerByIdAsync(id);
+        if(customer==null)
+        {
+            return NotFound();
+        }
+        else
+        {
             await _customerService.DeleteCustomerAsync(id);
             return Ok();
+        }
         }
     }
 

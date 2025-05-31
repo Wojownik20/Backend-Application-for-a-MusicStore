@@ -89,16 +89,24 @@ public class ProductController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductDto productDto)
     {
-        var product = new Product
+        var isProduct = await _productService.GetProductByIdAsync(id);
+        if (isProduct == null)
         {
-            Name = productDto.Name,
-            Category = productDto.Category,
-            Price = productDto.Price,
-            ReleaseDate = productDto.ReleaseDate
-        };
+            return NotFound();
+        }
+        else 
+        {
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Category = productDto.Category,
+                Price = productDto.Price,
+                ReleaseDate = productDto.ReleaseDate
+            };
 
-        await _productService.UpdateProductAsync(product);
-        return Ok();
+            await _productService.UpdateProductAsync(product);
+            return Ok();
+        }
     }
 
     /// <summary>
@@ -109,7 +117,15 @@ public class ProductController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _productService.DeleteProductAsync(id);
-        return Ok();
+        var isProduct = await _productService.GetProductByIdAsync(id);
+        if (isProduct == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            await _productService.DeleteProductAsync(id);
+            return Ok();
+        }
     }
 }

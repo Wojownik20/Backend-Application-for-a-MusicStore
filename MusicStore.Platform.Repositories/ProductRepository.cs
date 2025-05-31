@@ -1,54 +1,53 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using MusicStore.Platform.Repositories.Interfaces;
 using MusicStore.Core.Db;
 using MusicStore.Core.Data;
+using Dapper;
+using System.Data;
 
 
 namespace MusicStore.Platform.Repositories
 {
     public class ProductRepository : IProductRepository //Dependency Inversion Principle
     {
-        private readonly MusicStoreContext _context;
+        private readonly IDbConnection _dbConnection;
 
-        public ProductRepository(MusicStoreContext context) // DB injection, thats what we work on
+        public ProductRepository(IDbConnection Dbconnection) // DB injection, thats what we work on
         {
-            _context = context;
+            _dbConnection = Dbconnection;
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _context.Products.ToListAsync(); // Async getting list of customers
+            var sql = "SELECT * FROM Products";
+            return await _dbConnection.QueryAsync<Product>(sql);
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            var sql = "SELECT * FROM Products WHERE Id = @Id";
+            return await _dbConnection.QueryFirstOrDefaultAsync<Product>(sql, new { Id = id });
         }
 
         public async Task<int> AddAsync(Product product)
         {
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
-            return product.Id;
+            var sql = "INSERT INTO Products (Name, Category, Price, ReleaseDate) VALUES (@Name, @Category, @Price, @ReleaseDate); SELECT CAST(SCOPE_IDENTITY() as int)";
+            var newId = await _dbConnection.QuerySingleAsync<int>(sql, product);
+            return newId; 
         }
 
         public async Task<int> UpdateAsync(Product product)
         {
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
+            var sql = "UPDATE Products SET Name = @Name, Category = @Category, Price = @Price, ReleaseDate = @ReleaseDate WHERE Id = @Id";
+            await _dbConnection.ExecuteAsync(sql, product);
             return product.Id;
         }
 
         public async Task DeleteAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
-            }
+            var sql = "DELETE FROM Products WHERE Id = @Id";
+            await _dbConnection.ExecuteAsync(sql, new { Id = id });
         }
     }
 

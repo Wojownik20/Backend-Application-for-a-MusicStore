@@ -123,18 +123,25 @@ public class OrderController : ControllerBase //Base class
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
-
-        var orders = new Order
+        var IsOrder = await _orderService.GetOrderByIdAsync(id);
+        if (IsOrder == null)
         {
-            ProductId = orderDto.ProductId,
-            CustomerId = orderDto.CustomerId,
-            EmployeeId = orderDto.EmployeeId,
-            TotalPrice = orderDto.TotalPrice,
-            PurchaseDate = orderDto.PurchaseDate
-        };
+            return NotFound($"Order with ID {id} not found.");
+        }
+        else
+        {
+            var orders = new Order
+            {
+                ProductId = orderDto.ProductId,
+                CustomerId = orderDto.CustomerId,
+                EmployeeId = orderDto.EmployeeId,
+                TotalPrice = orderDto.TotalPrice,
+                PurchaseDate = orderDto.PurchaseDate
+            };
 
-        await _orderService.UpdateOrderAsync(orders);
-        return Ok();
+            await _orderService.UpdateOrderAsync(orders);
+            return Ok();
+        }
     }
 
     /// <summary>
@@ -145,7 +152,15 @@ public class OrderController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _orderService.DeleteOrderAsync(id);
-        return Ok();
+        var IsOrder = await _orderService.GetOrderByIdAsync(id);
+        if (IsOrder == null)
+        {
+            return NotFound($"Order with ID {id} not found.");
+        }
+        else
+        {
+            await _orderService.DeleteOrderAsync(id);
+            return Ok();
+        }
     }
 }
