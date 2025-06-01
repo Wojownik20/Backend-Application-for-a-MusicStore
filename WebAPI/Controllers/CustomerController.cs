@@ -82,13 +82,16 @@ public class CustomerController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
-        var customer = new Customer
+        var customer = await _customerService.GetCustomerByIdAsync(id);
+        if(customer == null)
+            return NotFound();
+        else
         {
-            Name = customerDto.Name,
-            BirthDate = customerDto.BirthDate
-        };
+            customer.Name = customerDto.Name;
+            customer.BirthDate = customerDto.BirthDate;
+        }
 
-        await _customerService.UpdateCustomerAsync(customer);
+            await _customerService.UpdateCustomerAsync(customer);
         return Ok();
     }
     /// <summary>

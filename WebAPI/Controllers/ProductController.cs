@@ -89,15 +89,18 @@ public class ProductController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductDto productDto)
     {
-        var product = new Product
+        var product = await _productService.GetProductByIdAsync(id);
+        if(product == null)
+            return NotFound();
+        else
         {
-            Name = productDto.Name,
-            Category = productDto.Category,
-            Price = productDto.Price,
-            ReleaseDate = productDto.ReleaseDate
-        };
+            product.Name = productDto.Name;
+            product.Category = productDto.Category;
+            product.Price = productDto.Price;
+            product.ReleaseDate = productDto.ReleaseDate;
+        }
 
-        await _productService.UpdateProductAsync(product);
+            await _productService.UpdateProductAsync(product);
         return Ok();
     }
 

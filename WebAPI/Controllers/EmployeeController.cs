@@ -86,12 +86,15 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
     {
-        var employee = new Employee
+        var employee = await _employeeService.GetEmployeeByIdAsync(id);
+        if(employee == null)
+            return NotFound();
+        else
         {
-            Name = employeeDto.Name,
-            BirthDate = employeeDto.BirthDate,
-            Salary = employeeDto.Salary
-        };
+            employee.Name = employeeDto.Name;
+            employee.BirthDate = employeeDto.BirthDate; 
+            employee.Salary = employeeDto.Salary;
+        }
 
         await _employeeService.UpdateEmployeeAsync(employee);
         return Ok();

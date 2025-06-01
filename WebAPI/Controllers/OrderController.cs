@@ -123,17 +123,21 @@ public class OrderController : ControllerBase //Base class
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
-
-        var orders = new Order
+        var order = await _orderService.GetOrderByIdAsync(id);
+        if (order == null)
+            return NotFound();
+        else
         {
-            ProductId = orderDto.ProductId,
-            CustomerId = orderDto.CustomerId,
-            EmployeeId = orderDto.EmployeeId,
-            TotalPrice = orderDto.TotalPrice,
-            PurchaseDate = orderDto.PurchaseDate
-        };
+            order.ProductId = orderDto.ProductId;
+            order.CustomerId = orderDto.CustomerId;
+            order.EmployeeId = orderDto.EmployeeId;
+            order.TotalPrice = orderDto.TotalPrice;
+            order.PurchaseDate = orderDto.PurchaseDate;
+        }
 
-        await _orderService.UpdateOrderAsync(orders);
+
+
+            await _orderService.UpdateOrderAsync(order);
         return Ok();
     }
 
