@@ -44,5 +44,29 @@ namespace MusicStore.Platform.Services
         {
             await _orderRepository.DeleteAsync(id);
         }
+
+        //DAPPER
+        public async Task<IEnumerable<Order>> GetAllOrdersAsyncByDapper()
+        {
+            return await _orderRepository.GetAllAsyncByDapper();
+        }
+        public async Task<Order> GetOrderByIdAsyncByDapper(int id)
+        {
+            return await _orderRepository.GetByIdAsyncByDapper(id);
+        }
+        public async Task<int> CreateOrderAsyncByDapper(Order order)
+        {
+            await _orderRepository.AddAsyncByDapper(order);
+            return order.Id;
+        }
+        public async Task<int> UpdateOrderAsyncByDapper(Order order)
+        {
+            await _orderRepository.UpdateAsyncByDapper(order);
+            return order.Id;
+        }
+        public async Task DeleteOrderAsyncByDapper(int id)
+        {
+            await _orderRepository.DeleteAsyncByDapper(id);
+        }
     }
 }

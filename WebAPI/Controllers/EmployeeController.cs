@@ -108,7 +108,118 @@ public class EmployeeController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _employeeService.DeleteEmployeeAsync(id);
+        var employee = await _employeeService.GetEmployeeByIdAsync(id);
+        if (employee == null)
+            return NotFound();
+        else
+        {
+            await _employeeService.DeleteEmployeeAsync(id);
+        return Ok();
+        }
+
+    }
+
+    //DAPPER
+    /// <summary>
+    /// Returns JSON list of Employees by Dapper
+    /// </summary>
+    /// <returns>OK 200</returns>
+    [HttpGet("dapper")]
+    public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetAllAsyncByDapper() 
+    {
+        var employees = await _employeeService.GetAllEmployeesAsyncByDapper();
+        var employeeDtos = employees.Select(e => new EmployeeReadDto
+        {
+            Id = e.Id,
+            Name = e.Name,
+            BirthDate = e.BirthDate,
+            Salary = e.Salary
+        });
+        return Ok(employeeDtos);
+    }
+
+    /// <summary>
+    /// Return employee by Id by Dapper
+    /// </summary>
+    /// <param name="id">Employee Id</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
+    [HttpGet("dapper/{id}")]
+    public async Task<ActionResult<EmployeeReadDto>> GetByIdByDapper([FromRoute] int id)
+    {
+        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        if (employee == null)
+            return NotFound();
+
+        var employeeDto = new EmployeeReadDto
+        {
+            Id = employee.Id,
+            Name = employee.Name,
+            BirthDate = employee.BirthDate,
+            Salary = employee.Salary
+        };
+
+        return Ok(employeeDto);
+    }
+
+    /// <summary>
+    /// Creates an Employee by Dapper
+    /// </summary>
+    /// <param name="employeeDto">Employee Model</param>
+    /// <returns>200 OK</returns>
+    [HttpPost("dapper")]
+    public async Task<IActionResult> CreateByDapper([FromBody] EmployeeDto employeeDto)
+    {
+        var employee = new Employee
+        {
+            Name = employeeDto.Name,
+            BirthDate = employeeDto.BirthDate,
+            Salary = employeeDto.Salary
+        };
+
+        await _employeeService.CreateEmployeeAsyncByDapper(employee);
         return Ok();
     }
+
+    /// <summary>
+    /// Updates an Employee by Dapper
+    /// </summary>
+    /// <param name="id">Employee Id</param>
+    /// <param name="employeeDto">Employee model</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
+    [HttpPut("dapper/{id}")]
+    public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
+    {
+        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        if (employee == null)
+            return NotFound();
+        else
+        {
+            employee.Name = employeeDto.Name;
+            employee.BirthDate = employeeDto.BirthDate;
+            employee.Salary = employeeDto.Salary;
+        }
+
+        await _employeeService.UpdateEmployeeAsyncByDapper(employee);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Deletes an Employee by Dapper
+    /// </summary>
+    /// <param name="id">EmployeeId</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
+    [HttpDelete("dapper/{id}")]
+    public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
+    {
+        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        if (employee == null)
+            return NotFound();
+        else
+        {
+            await _employeeService.DeleteEmployeeAsyncByDapper(id);
+            return Ok();
+        }
+
+    }
+
 }

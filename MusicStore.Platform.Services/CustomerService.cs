@@ -19,6 +19,8 @@ namespace MusicStore.Platform.Services
             _customerRepository = customerRepository;
         }
 
+
+        // EF CORE
         public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
         {
            return await _customerRepository.GetAllAsync();
@@ -45,6 +47,28 @@ namespace MusicStore.Platform.Services
         public async Task DeleteCustomerAsync(int id)
         {
             await _customerRepository.DeleteAsync(id);
+        }
+
+        // DAPPER
+        public async Task<IEnumerable<Customer>> GetAllCustomersAsyncByDapper()
+        {
+            return await _customerRepository.GetAllAsyncByDapper();
+        }
+        public async Task<Customer> GetCustomerByIdAsyncByDapper(int id)
+        {
+            return await _customerRepository.GetByIdAsyncByDapper(id);
+        }
+        public async Task<int> CreateCustomerAsyncByDapper(Customer customer)
+        {
+            return await _customerRepository.AddAsyncByDapper(customer);
+        }
+        public async Task<int> UpdateCustomerAsyncByDapper(Customer customer)
+        {
+            return await _customerRepository.UpdateAsyncByDapper(customer);
+        }
+        public async Task DeleteCustomerAsyncByDapper(int id)
+        {
+            await _customerRepository.DeleteAsyncByDapper(id);
         }
     }
 }

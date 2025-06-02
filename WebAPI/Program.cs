@@ -1,10 +1,12 @@
-using MusicStore.Platform.Repositories.Interfaces;
-using MusicStore.Platform.Repositories;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MusicStore.Core.Db;
-using MusicStore.Platform.Services.Interfaces;  
+using MusicStore.Platform.Repositories;
+using MusicStore.Platform.Repositories.Interfaces;
 using MusicStore.Platform.Services;
 using MusicStore.Platform.Services.Extensions;
-using Microsoft.EntityFrameworkCore;
+using MusicStore.Platform.Services.Interfaces;  
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<MusicStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //Connection to DataBase
+
+
+builder.Services.AddTransient<IDbConnection>(sp =>
+    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Repositories and Services
 
