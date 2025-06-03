@@ -1,7 +1,12 @@
 ﻿using LeverX.WebAPI.ModelsDto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
+using MusicStore.WebAPI.Features.Employees.Commands;
+using MusicStore.WebAPI.Features.Employees.Queries;
+using MusicStore.WebAPI.Features.Products.Commands;
+using MusicStore.WebAPI.Features.Products.Queries;
 using WebAPI.ModelsDto;
 
 namespace LeverX.WebAPI.Controllers;
@@ -11,12 +16,13 @@ namespace LeverX.WebAPI.Controllers;
 public class ProductController : ControllerBase //Base class
 {
     private readonly IProductService _productService; // Injecting our DB
-    public ProductController(IProductService productService)
+    private readonly IMediator _mediator; // Injecting MediatR for CQRS
+    public ProductController(IProductService productService, IMediator mediator)
     {
         _productService = productService;
+        _mediator = mediator;
     }
 
-    //EF Core
 
     /// <summary>
     /// Returns a list of Products
@@ -25,16 +31,8 @@ public class ProductController : ControllerBase //Base class
     [HttpGet] // GET /api/product
     public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var products = await _productService.GetAllProductsAsync();
-        var productDtos = products.Select(p => new ProductReadDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Category = p.Category,
-            Price = p.Price,
-            ReleaseDate = p.ReleaseDate
-        });
-        return Ok(productDtos);
+        var product = await _mediator.Send(new GetAllProductsQuery());
+        return Ok(product);
     }
 
     /// <summary>
@@ -45,7 +43,7 @@ public class ProductController : ControllerBase //Base class
     [HttpGet("{id}")] // GET api/product/{id}
     public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] int id)
     {
-        var product = await _productService.GetProductByIdAsync(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
 
@@ -56,8 +54,8 @@ public class ProductController : ControllerBase //Base class
             Category = product.Category,
             Price = product.Price,
             ReleaseDate = product.ReleaseDate
-        };
 
+        };
         return Ok(productDto);
     }
 
@@ -69,15 +67,7 @@ public class ProductController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ProductDto productDto)
     {
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Category = productDto.Category,
-            Price = productDto.Price,
-            ReleaseDate = productDto.ReleaseDate
-        };
-
-        await _productService.CreateProductAsync(product);
+        await _mediator.Send(new CreateProductCommand(productDto.Name, productDto.Category, productDto.Price, productDto.ReleaseDate));
         return Ok();
     }
 
@@ -90,19 +80,14 @@ public class ProductController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductDto productDto)
     {
-        var product = await _productService.GetProductByIdAsync(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
         else
         {
-            product.Name = productDto.Name;
-            product.Category = productDto.Category;
-            product.Price = productDto.Price;
-            product.ReleaseDate = productDto.ReleaseDate;
+            await _mediator.Send(new UpdateProductCommand(id, productDto.Name, productDto.Category, productDto.Price, productDto.ReleaseDate));
+            return NoContent();
         }
-
-        await _productService.UpdateProductAsync(product);
-        return Ok();
     }
 
     /// <summary>
@@ -113,11 +98,14 @@ public class ProductController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var product = await _productService.GetProductByIdAsync(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
-        await _productService.DeleteProductAsync(id);
-        return Ok();
+        else
+        {
+            await _mediator.Send(new DeleteProductCommand(id));
+            return NoContent();
+        }
     }
 
     //DAPPER
@@ -129,16 +117,8 @@ public class ProductController : ControllerBase //Base class
     [HttpGet("dapper")] 
     public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAllAsyncByDapper() 
     {
-        var products = await _productService.GetAllProductsAsyncByDapper();
-        var productDtos = products.Select(p => new ProductReadDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Category = p.Category,
-            Price = p.Price,
-            ReleaseDate = p.ReleaseDate
-        });
-        return Ok(productDtos);
+        var product = await _mediator.Send(new GetAllProductsQuery());
+        return Ok(product);
     }
 
     /// <summary>
@@ -149,7 +129,7 @@ public class ProductController : ControllerBase //Base class
     [HttpGet("dapper/{id}")] // GET api/product/{id}
     public async Task<ActionResult<ProductReadDto>> GetByIdByDapper([FromRoute] int id)
     {
-        var product = await _productService.GetProductByIdAsyncByDapper(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
 
@@ -160,8 +140,8 @@ public class ProductController : ControllerBase //Base class
             Category = product.Category,
             Price = product.Price,
             ReleaseDate = product.ReleaseDate
-        };
 
+        };
         return Ok(productDto);
     }
 
@@ -173,15 +153,7 @@ public class ProductController : ControllerBase //Base class
     [HttpPost("dapper")]
     public async Task<IActionResult> CreateByDapper([FromBody] ProductDto productDto)
     {
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Category = productDto.Category,
-            Price = productDto.Price,
-            ReleaseDate = productDto.ReleaseDate
-        };
-
-        await _productService.CreateProductAsyncByDapper(product);
+        await _mediator.Send(new CreateProductCommand(productDto.Name, productDto.Category, productDto.Price, productDto.ReleaseDate));
         return Ok();
     }
 
@@ -194,19 +166,14 @@ public class ProductController : ControllerBase //Base class
     [HttpPut("dapper/{id}")]
     public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] ProductDto productDto)
     {
-        var product = await _productService.GetProductByIdAsyncByDapper(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
         else
         {
-            product.Name = productDto.Name;
-            product.Category = productDto.Category;
-            product.Price = productDto.Price;
-            product.ReleaseDate = productDto.ReleaseDate;
+            await _mediator.Send(new UpdateProductCommand(id, productDto.Name, productDto.Category, productDto.Price, productDto.ReleaseDate));
+            return NoContent();
         }
-
-        await _productService.UpdateProductAsyncByDapper(product);
-        return Ok();
     }
 
     /// <summary>
@@ -217,13 +184,13 @@ public class ProductController : ControllerBase //Base class
     [HttpDelete("dapper/{id}")]
     public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
-        var product = await _productService.GetProductByIdAsyncByDapper(id);
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         if (product == null)
             return NotFound();
         else
         {
-        await _productService.DeleteProductAsyncByDapper(id);
-        return Ok();
-        }    
+            await _mediator.Send(new DeleteProductCommand(id));
+            return NoContent();
+        }
     }
 }

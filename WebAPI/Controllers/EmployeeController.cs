@@ -1,7 +1,9 @@
-using MusicStore.Platform.Services.Interfaces;
-using MusicStore.Core.Data;
 using LeverX.WebAPI.ModelsDto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MusicStore.Platform.Services.Interfaces;
+using MusicStore.WebAPI.Features.Employees.Commands;
+using MusicStore.WebAPI.Features.Employees.Queries;
 
 namespace LeverX.WebAPI.Controllers;
 
@@ -10,9 +12,11 @@ namespace LeverX.WebAPI.Controllers;
 public class EmployeeController : ControllerBase //Base class
 {
     private readonly IEmployeeService _employeeService; // Injecting our DB
-    public EmployeeController(IEmployeeService employeeService)
+    private readonly IMediator _mediator; // Injecting MediatR for CQRS
+    public EmployeeController(IEmployeeService employeeService, IMediator mediator)
     {
         _employeeService = employeeService;
+        _mediator = mediator;
     }
 
 
@@ -23,15 +27,8 @@ public class EmployeeController : ControllerBase //Base class
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var employees = await _employeeService.GetAllEmployeesAsync();
-        var employeeDtos = employees.Select(e => new EmployeeReadDto
-        {
-            Id=e.Id,
-            Name = e.Name,
-            BirthDate = e.BirthDate,
-            Salary = e.Salary
-        });
-        return Ok(employeeDtos);
+        var employee = await _mediator.Send(new GetAllEmployeesQuery());
+        return Ok(employee);
     }
 
     /// <summary>
@@ -42,18 +39,17 @@ public class EmployeeController : ControllerBase //Base class
     [HttpGet("{id}")]
     public async Task<ActionResult<EmployeeReadDto>> GetById([FromRoute] int id)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsync(id);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
             return NotFound();
 
         var employeeDto = new EmployeeReadDto
         {
-            Id=employee.Id,
+            Id = employee.Id,
             Name = employee.Name,
             BirthDate = employee.BirthDate,
             Salary = employee.Salary
         };
-
         return Ok(employeeDto);
     }
 
@@ -65,14 +61,7 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] EmployeeDto employeeDto)
     {
-        var employee = new Employee
-        {
-            Name = employeeDto.Name,
-            BirthDate = employeeDto.BirthDate,
-            Salary = employeeDto.Salary
-        };
-
-        await _employeeService.CreateEmployeeAsync(employee);
+        await _mediator.Send(new CreateEmployeeCommand(employeeDto.Name, employeeDto.BirthDate, employeeDto.Salary));
         return Ok();
     }
 
@@ -85,18 +74,14 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsync(id);
-        if(employee == null)
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
+        if (employee == null)
             return NotFound();
         else
         {
-            employee.Name = employeeDto.Name;
-            employee.BirthDate = employeeDto.BirthDate; 
-            employee.Salary = employeeDto.Salary;
+            await _mediator.Send(new UpdateEmployeeCommand(id, employeeDto.Name, employeeDto.BirthDate, employeeDto.Salary));
+            return NoContent();
         }
-
-        await _employeeService.UpdateEmployeeAsync(employee);
-        return Ok();
     }
 
     /// <summary>
@@ -107,13 +92,13 @@ public class EmployeeController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsync(id);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
             return NotFound();
         else
         {
-            await _employeeService.DeleteEmployeeAsync(id);
-        return Ok();
+            await _mediator.Send(new DeleteEmployeeCommand(id));
+            return NoContent();
         }
 
     }
@@ -126,15 +111,8 @@ public class EmployeeController : ControllerBase //Base class
     [HttpGet("dapper")]
     public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetAllAsyncByDapper() 
     {
-        var employees = await _employeeService.GetAllEmployeesAsyncByDapper();
-        var employeeDtos = employees.Select(e => new EmployeeReadDto
-        {
-            Id = e.Id,
-            Name = e.Name,
-            BirthDate = e.BirthDate,
-            Salary = e.Salary
-        });
-        return Ok(employeeDtos);
+        var employees = await _mediator.Send(new GetAllEmployeesQuery());
+        return Ok(employees);
     }
 
     /// <summary>
@@ -145,7 +123,7 @@ public class EmployeeController : ControllerBase //Base class
     [HttpGet("dapper/{id}")]
     public async Task<ActionResult<EmployeeReadDto>> GetByIdByDapper([FromRoute] int id)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
             return NotFound();
 
@@ -156,7 +134,6 @@ public class EmployeeController : ControllerBase //Base class
             BirthDate = employee.BirthDate,
             Salary = employee.Salary
         };
-
         return Ok(employeeDto);
     }
 
@@ -168,14 +145,7 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPost("dapper")]
     public async Task<IActionResult> CreateByDapper([FromBody] EmployeeDto employeeDto)
     {
-        var employee = new Employee
-        {
-            Name = employeeDto.Name,
-            BirthDate = employeeDto.BirthDate,
-            Salary = employeeDto.Salary
-        };
-
-        await _employeeService.CreateEmployeeAsyncByDapper(employee);
+        await _mediator.Send(new CreateEmployeeCommand(employeeDto.Name, employeeDto.BirthDate, employeeDto.Salary));
         return Ok();
     }
 
@@ -188,18 +158,14 @@ public class EmployeeController : ControllerBase //Base class
     [HttpPut("dapper/{id}")]
     public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
             return NotFound();
         else
         {
-            employee.Name = employeeDto.Name;
-            employee.BirthDate = employeeDto.BirthDate;
-            employee.Salary = employeeDto.Salary;
+            await _mediator.Send(new UpdateEmployeeCommand(id, employeeDto.Name, employeeDto.BirthDate, employeeDto.Salary));
+            return NoContent();
         }
-
-        await _employeeService.UpdateEmployeeAsyncByDapper(employee);
-        return Ok();
     }
 
     /// <summary>
@@ -210,13 +176,13 @@ public class EmployeeController : ControllerBase //Base class
     [HttpDelete("dapper/{id}")]
     public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
-        var employee = await _employeeService.GetEmployeeByIdAsyncByDapper(id);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
             return NotFound();
         else
         {
-            await _employeeService.DeleteEmployeeAsyncByDapper(id);
-            return Ok();
+            await _mediator.Send(new DeleteEmployeeCommand(id));
+            return NoContent();
         }
 
     }

@@ -1,7 +1,14 @@
 using LeverX.WebAPI.ModelsDto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
+using MusicStore.WebAPI.Features.Customers.Queries;
+using MusicStore.WebAPI.Features.Employees.Commands;
+using MusicStore.WebAPI.Features.Employees.Queries;
+using MusicStore.WebAPI.Features.Orders.Commands;
+using MusicStore.WebAPI.Features.Orders.Queries;
+using MusicStore.WebAPI.Features.Products.Queries;
 using WebAPI.ModelsDto;
 
 namespace LeverX.WebAPI.Controllers;
@@ -11,9 +18,11 @@ namespace LeverX.WebAPI.Controllers;
 public class OrderController : ControllerBase //Base class
 {
     private readonly IOrderService _orderService; // Injecting our DB
-    public OrderController(IOrderService orderService)
+    private readonly IMediator _mediator; // Injecting MediatR for CQRS
+    public OrderController(IOrderService orderService, IMediator mediator)
     {
         _orderService = orderService;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -23,17 +32,8 @@ public class OrderController : ControllerBase //Base class
     [HttpGet]
     public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var orders = await _orderService.GetAllOrdersAsync();
-        var orderDtos = orders.Select(o => new OrderReadDto
-        {
-            Id = o.Id, 
-            ProductId = o.ProductId,
-            CustomerId = o.CustomerId,
-            EmployeeId = o.EmployeeId,
-            TotalPrice = o.TotalPrice,
-            PurchaseDate = o.PurchaseDate
-        });
-        return Ok(orderDtos);
+        var order = await _mediator.Send(new GetAllOrdersQuery());
+        return Ok(order);
     }
 
     /// <summary>
@@ -44,21 +44,19 @@ public class OrderController : ControllerBase //Base class
     [HttpGet("{id}")]
     public async Task<ActionResult<OrderReadDto>> GetById([FromRoute] int id)
     {
-        var order = await _orderService.GetOrderByIdAsync(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
 
-        var orders = new OrderReadDto
+        var orderDto = new OrderReadDto
         {
-            Id = order.Id,
             ProductId = order.ProductId,
             CustomerId = order.CustomerId,
             EmployeeId = order.EmployeeId,
             TotalPrice = order.TotalPrice,
             PurchaseDate = order.PurchaseDate
         };
-
-        return Ok(orders);
+        return Ok(orderDto);
     }
 
     /// <summary>
@@ -69,32 +67,23 @@ public class OrderController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] OrderDto orderDto)
     {
-        var customer = await _orderService.GetOrderByIdAsync(orderDto.CustomerId);
-        if(customer == null)
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
+        if (customer == null)
         {
             return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
         }
-        var product = await _orderService.GetOrderByIdAsync(orderDto.ProductId);
-        if(product==null)
+        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
+        if (product==null)
         {
             return NotFound($"Product with ID {orderDto.ProductId} not found.");
         }
-        var employee = await _orderService.GetOrderByIdAsync(orderDto.EmployeeId);
-        if(employee==null)
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
+        if (employee==null)
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
 
-        var orders = new Order
-        {
-            ProductId = orderDto.ProductId,
-            CustomerId = orderDto.CustomerId,
-            EmployeeId = orderDto.EmployeeId,
-            TotalPrice = orderDto.TotalPrice,
-            PurchaseDate = orderDto.PurchaseDate
-        };
-
-        await _orderService.CreateOrderAsync(orders);
+        await _mediator.Send(new CreateOrderCommand(orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
         return Ok();
     }
 
@@ -107,35 +96,29 @@ public class OrderController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
-        var customer = await _orderService.GetOrderByIdAsync(orderDto.CustomerId);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
         if (customer == null)
         {
             return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
         }
-        var product = await _orderService.GetOrderByIdAsync(orderDto.ProductId);
+        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
         if (product == null)
         {
             return NotFound($"Product with ID {orderDto.ProductId} not found.");
         }
-        var employee = await _orderService.GetOrderByIdAsync(orderDto.EmployeeId);
-        if (employee==null)
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
+        if (employee == null)
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
-        var order = await _orderService.GetOrderByIdAsync(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
         else
         {
-            order.ProductId = orderDto.ProductId;
-            order.CustomerId = orderDto.CustomerId;
-            order.EmployeeId = orderDto.EmployeeId;
-            order.TotalPrice = orderDto.TotalPrice;
-            order.PurchaseDate = orderDto.PurchaseDate;
+            await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
+            return NoContent();
         }
-
-            await _orderService.UpdateOrderAsync(order);
-        return Ok();
     }
 
     /// <summary>
@@ -146,129 +129,104 @@ public class OrderController : ControllerBase //Base class
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var order = await _orderService.GetOrderByIdAsync(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
-        await _orderService.DeleteOrderAsync(id);
-        return Ok();
+        else
+        {
+            await _mediator.Send(new DeleteOrderCommand(id));
+            return NoContent();
+        }
     }
 
     //DAPPER
     [HttpGet("dapper")]
     public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAllAsyncByDapper()
     {
-        var orders = await _orderService.GetAllOrdersAsyncByDapper();
-        var orderDtos = orders.Select(o => new OrderReadDto
-        {
-            Id = o.Id,
-            ProductId = o.ProductId,
-            CustomerId = o.CustomerId,
-            EmployeeId = o.EmployeeId,
-            TotalPrice = o.TotalPrice,
-            PurchaseDate = o.PurchaseDate
-        });
-        return Ok(orderDtos);
+        var order = await _mediator.Send(new GetAllOrdersQuery());
+        return Ok(order);
     }
 
     [HttpGet("dapper/{id}")]
     public async Task<ActionResult<OrderReadDto>> GetByIdByDapper([FromRoute] int id)
     {
-        var order = await _orderService.GetOrderByIdAsyncByDapper(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
 
-        var orders = new OrderReadDto
+        var orderDto = new OrderReadDto
         {
-            Id = order.Id,
             ProductId = order.ProductId,
             CustomerId = order.CustomerId,
             EmployeeId = order.EmployeeId,
             TotalPrice = order.TotalPrice,
             PurchaseDate = order.PurchaseDate
         };
-
-        return Ok(orders);
+        return Ok(orderDto);
     }
 
 
     [HttpPost("dapper")]
     public async Task<IActionResult> CreateByDapper([FromBody] OrderDto orderDto)
     {
-        var customer = await _orderService.GetOrderByIdAsyncByDapper(orderDto.CustomerId);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
         if (customer == null)
         {
             return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
         }
-        var product = await _orderService.GetOrderByIdAsyncByDapper(orderDto.ProductId);
+        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
         if (product == null)
         {
             return NotFound($"Product with ID {orderDto.ProductId} not found.");
         }
-        var employee = await _orderService.GetOrderByIdAsyncByDapper(orderDto.EmployeeId);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
         if (employee == null)
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
 
-        var orders = new Order
-        {
-            ProductId = orderDto.ProductId,
-            CustomerId = orderDto.CustomerId,
-            EmployeeId = orderDto.EmployeeId,
-            TotalPrice = orderDto.TotalPrice,
-            PurchaseDate = orderDto.PurchaseDate
-        };
-
-        await _orderService.CreateOrderAsyncByDapper(orders);
+        await _mediator.Send(new CreateOrderCommand(orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
         return Ok();
     }
 
     [HttpPut("dapper/{id}")]
     public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
-        var customer = await _orderService.GetOrderByIdAsyncByDapper(orderDto.CustomerId);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
         if (customer == null)
         {
             return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
         }
-        var product = await _orderService.GetOrderByIdAsyncByDapper(orderDto.ProductId);
+        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
         if (product == null)
         {
             return NotFound($"Product with ID {orderDto.ProductId} not found.");
         }
-        var employee = await _orderService.GetOrderByIdAsyncByDapper(orderDto.EmployeeId);
+        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
         if (employee == null)
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
-        var order = await _orderService.GetOrderByIdAsyncByDapper(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
         else
         {
-            order.ProductId = orderDto.ProductId;
-            order.CustomerId = orderDto.CustomerId;
-            order.EmployeeId = orderDto.EmployeeId;
-            order.TotalPrice = orderDto.TotalPrice;
-            order.PurchaseDate = orderDto.PurchaseDate;
+            await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
+            return NoContent();
         }
-
-
-
-        await _orderService.UpdateOrderAsyncByDapper(order);
-        return Ok();
     }
 
     [HttpDelete("dapper/{id}")]
     public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
-        var order = await _orderService.GetOrderByIdAsyncByDapper(id);
+        var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
             return NotFound();
         else
         {
-            await _orderService.DeleteOrderAsyncByDapper(id);
-            return Ok();
+            await _mediator.Send(new DeleteOrderCommand(id));
+            return NoContent();
         }
     }
 }

@@ -1,7 +1,10 @@
-using MusicStore.Platform.Services.Interfaces;
-using MusicStore.Core.Data;
 using LeverX.WebAPI.ModelsDto;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MusicStore.Core.Data;
+using MusicStore.Platform.Services.Interfaces;
+using MusicStore.WebAPI.Features.Customers.Commands;
+using MusicStore.WebAPI.Features.Customers.Queries;
 
 namespace LeverX.WebAPI.Controllers;
 
@@ -11,9 +14,11 @@ public class CustomerController : ControllerBase //Base class
 {
 
     private readonly ICustomerService _customerService; // Injecting our DB
-    public CustomerController(ICustomerService customerService)
+    private readonly IMediator _mediator; // Injecting MediatR for CQRS
+    public CustomerController(ICustomerService customerService, IMediator Mediator)
     {
         _customerService = customerService;
+        _mediator = Mediator;
     }
 
     /// <summary>
@@ -23,14 +28,8 @@ public class CustomerController : ControllerBase //Base class
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllAsync() // WebAPI changed for Db
     {
-        var customers = await _customerService.GetAllCustomersAsync();
-        var customerDtos = customers.Select(c => new CustomerReadDto
-        {
-            Id=c.Id,
-            Name = c.Name,
-            BirthDate = c.BirthDate
-        });
-        return Ok(customerDtos);
+        var customers = await _mediator.Send(new GetAllCustomersQuery());
+        return Ok(customers);
     }
 
     /// <summary>
@@ -41,7 +40,7 @@ public class CustomerController : ControllerBase //Base class
     [HttpGet("{id}")]
     public async Task<ActionResult<CustomerReadDto>> GetById([FromRoute] int id)
     {
-        var customer = await _customerService.GetCustomerByIdAsync(id);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
         if (customer == null)
             return NotFound();
 
@@ -51,7 +50,7 @@ public class CustomerController : ControllerBase //Base class
             Name = customer.Name,
             BirthDate = customer.BirthDate
         };
-        return Ok(customer);
+        return Ok(customerDto);
     }
 
     /// <summary>
@@ -62,13 +61,7 @@ public class CustomerController : ControllerBase //Base class
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CustomerDto customerDto)
     {
-        var customer = new Customer
-        {
-            Name = customerDto.Name,
-            BirthDate = customerDto.BirthDate
-        };
-
-        await _customerService.CreateCustomerAsync(customer);
+        await _mediator.Send(new CreateCustomerCommand(customerDto.Name, customerDto.BirthDate));
         return Ok();
     }
 
@@ -81,17 +74,14 @@ public class CustomerController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
-        var customer = await _customerService.GetCustomerByIdAsync(id);
-        if(customer == null)
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
+        if (customer == null)
             return NotFound();
         else
         {
-            customer.Name = customerDto.Name;
-            customer.BirthDate = customerDto.BirthDate;
+            await _mediator.Send(new UpdateCustomerCommand(id, customerDto.Name, customerDto.BirthDate));
+            return NoContent();
         }
-
-            await _customerService.UpdateCustomerAsync(customer);
-        return Ok();
     }
     /// <summary>
     /// Deletion of customer
@@ -100,17 +90,18 @@ public class CustomerController : ControllerBase //Base class
     /// <returns>204 if customer deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id) {
-        var customer = await _customerService.GetCustomerByIdAsync(id);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
         if (customer == null)
             return NotFound();
         else
         {
-            await _customerService.DeleteCustomerAsync(id);
-            return Ok();
+            await _mediator.Send(new DeleteCustomerCommand(id));
+            return NoContent();
         }
         }
 
-    // DAPPER
+    //DAPPER
+
 
     /// <summary>
     /// Returns list of customers using Dapper
@@ -119,14 +110,8 @@ public class CustomerController : ControllerBase //Base class
     [HttpGet("dapper")]
     public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllAsyncByDapper() // WebAPI changed for Db
     {
-        var customers = await _customerService.GetAllCustomersAsyncByDapper();
-        var customerDtos = customers.Select(c => new CustomerReadDto
-        {
-            Id = c.Id,
-            Name = c.Name,
-            BirthDate = c.BirthDate
-        });
-        return Ok(customerDtos);
+        var customers = await _mediator.Send(new GetAllCustomersQuery());
+        return Ok(customers);
     }
 
     /// <summary>
@@ -137,7 +122,7 @@ public class CustomerController : ControllerBase //Base class
     [HttpGet("dapper/{id}")]
     public async Task<ActionResult<CustomerReadDto>> GetByIdByDapper([FromRoute] int id)
     {
-        var customer = await _customerService.GetCustomerByIdAsyncByDapper(id);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
         if (customer == null)
             return NotFound();
 
@@ -147,7 +132,7 @@ public class CustomerController : ControllerBase //Base class
             Name = customer.Name,
             BirthDate = customer.BirthDate
         };
-        return Ok(customer);
+        return Ok(customerDto);
     }
 
     /// <summary>
@@ -158,13 +143,7 @@ public class CustomerController : ControllerBase //Base class
     [HttpPost("dapper")]
     public async Task<IActionResult> CreateByDapper([FromBody] CustomerDto customerDto)
     {
-        var customer = new Customer
-        {
-            Name = customerDto.Name,
-            BirthDate = customerDto.BirthDate
-        };
-
-        await _customerService.CreateCustomerAsyncByDapper(customer);
+        await _mediator.Send(new CreateCustomerCommand(customerDto.Name, customerDto.BirthDate));
         return Ok();
     }
 
@@ -177,17 +156,14 @@ public class CustomerController : ControllerBase //Base class
     [HttpPut("dapper/{id}")]
     public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] CustomerDto customerDto)
     {
-        var customer = await _customerService.GetCustomerByIdAsyncByDapper(id);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
         if (customer == null)
             return NotFound();
         else
         {
-            customer.Name = customerDto.Name;
-            customer.BirthDate = customerDto.BirthDate;
+            await _mediator.Send(new UpdateCustomerCommand(id, customerDto.Name, customerDto.BirthDate));
+            return NoContent();
         }
-
-        await _customerService.UpdateCustomerAsyncByDapper(customer);
-        return Ok();
     }
 
     /// <summary>
@@ -198,12 +174,13 @@ public class CustomerController : ControllerBase //Base class
     [HttpDelete("dapper/{id}")]
     public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
-        var customer = await _customerService.GetCustomerByIdAsyncByDapper(id);
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
         if (customer == null)
             return NotFound();
-        else{
-                await _customerService.DeleteCustomerAsyncByDapper(id);
-        return Ok();
+        else
+        {
+            await _mediator.Send(new DeleteCustomerCommand(id));
+            return NoContent();
         }
 
     }
