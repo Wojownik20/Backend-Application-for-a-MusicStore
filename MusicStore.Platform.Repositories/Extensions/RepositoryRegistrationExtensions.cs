@@ -14,9 +14,14 @@ namespace MusicStore.Platform.Services.Extensions
         public static void RegisterPlatformRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerRepositoryDapper, CustomerRepositoryDapper>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderRepositoryDapper, OrderRepositoryDapper>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeRepositoryDapper, EmployeeRepositoryDapper>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepositoryDapper, ProductRepositoryDapper>();
+
         }
 
     }

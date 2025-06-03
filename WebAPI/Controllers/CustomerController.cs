@@ -120,7 +120,7 @@ public class CustomerController : ControllerBase //Base class
     [HttpGet("dapper")]
     public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllAsyncByDapper() // WebAPI changed for Db
     {
-        var customers = await _customerService.GetAllCustomersAsync();
+        var customers = await _customerService.GetAllCustomersAsyncByDapper();
         var customerDtos = customers.Select(c => new CustomerReadDto
         {
             Id = c.Id,

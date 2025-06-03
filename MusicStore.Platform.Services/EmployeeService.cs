@@ -3,15 +3,18 @@ using System.Threading.Tasks;
 using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Platform.Repositories.Interfaces;
+using System.Data;
 
 namespace MusicStore.Platform.Services
 {
     public class EmployeeService : IEmployeeService //Dependency Inversion Principle
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        private readonly IEmployeeRepositoryDapper _employeeRepositoryDapper;
+        public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeRepositoryDapper EmployeeRepositoryDapperDbConnection)
         {
             _employeeRepository = employeeRepository;
+            _employeeRepositoryDapper = EmployeeRepositoryDapperDbConnection; 
         }
 
         //EF CORE
@@ -45,25 +48,25 @@ namespace MusicStore.Platform.Services
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsyncByDapper()
         {
-            return await _employeeRepository.GetAllAsyncByDapper();
+            return await _employeeRepositoryDapper.GetAllAsyncByDapper();
         }
         public async Task<Employee> GetEmployeeByIdAsyncByDapper(int id)
         {
-            return await _employeeRepository.GetByIdAsyncByDapper(id); // Async getting list of customers
+            return await _employeeRepositoryDapper.GetByIdAsyncByDapper(id); // Async getting list of customers
         }
         public async Task<int> CreateEmployeeAsyncByDapper(Employee employee)
         {
-            await _employeeRepository.AddAsyncByDapper(employee);
+            await _employeeRepositoryDapper.AddAsyncByDapper(employee);
             return employee.Id;
         }
         public async Task<int> UpdateEmployeeAsyncByDapper(Employee employee)
         {
-            await _employeeRepository.UpdateAsyncByDapper(employee);
+            await _employeeRepositoryDapper.UpdateAsyncByDapper(employee);
             return employee.Id;
         }
         public async Task DeleteEmployeeAsyncByDapper(int id)
         {
-            await _employeeRepository.DeleteAsyncByDapper(id);
+            await _employeeRepositoryDapper.DeleteAsyncByDapper(id);
         }
     }
 

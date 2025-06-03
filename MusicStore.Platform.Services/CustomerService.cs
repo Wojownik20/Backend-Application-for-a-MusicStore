@@ -13,10 +13,12 @@ namespace MusicStore.Platform.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository; //Private Repo injected in here
+        private readonly ICustomerRepositoryDapper _customerRepositoryDapper;
 
-        public CustomerService(ICustomerRepository customerRepository) // ICustomerRepo injected into Service
+        public CustomerService(ICustomerRepository customerRepository, ICustomerRepositoryDapper customerRepositoryDapper) // ICustomerRepo injected into Service
         {
             _customerRepository = customerRepository;
+            _customerRepositoryDapper = customerRepositoryDapper;
         }
 
 
@@ -52,23 +54,23 @@ namespace MusicStore.Platform.Services
         // DAPPER
         public async Task<IEnumerable<Customer>> GetAllCustomersAsyncByDapper()
         {
-            return await _customerRepository.GetAllAsyncByDapper();
+            return await _customerRepositoryDapper.GetAllAsyncByDapper();
         }
         public async Task<Customer> GetCustomerByIdAsyncByDapper(int id)
         {
-            return await _customerRepository.GetByIdAsyncByDapper(id);
+            return await _customerRepositoryDapper.GetByIdAsyncByDapper(id);
         }
         public async Task<int> CreateCustomerAsyncByDapper(Customer customer)
         {
-            return await _customerRepository.AddAsyncByDapper(customer);
+            return await _customerRepositoryDapper.AddAsyncByDapper(customer);
         }
         public async Task<int> UpdateCustomerAsyncByDapper(Customer customer)
         {
-            return await _customerRepository.UpdateAsyncByDapper(customer);
+            return await _customerRepositoryDapper.UpdateAsyncByDapper(customer);
         }
         public async Task DeleteCustomerAsyncByDapper(int id)
         {
-            await _customerRepository.DeleteAsyncByDapper(id);
+            await _customerRepositoryDapper.DeleteAsyncByDapper(id);
         }
     }
 }

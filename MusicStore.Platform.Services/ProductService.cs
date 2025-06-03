@@ -12,10 +12,12 @@ namespace MusicStore.Platform.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository; //Private Repo injected in here
+        private readonly IProductRepositoryDapper _productRepositoryDapper; //Private Repo injected in here
 
-        public ProductService(IProductRepository productRepository) // ICustomerRepo injected into Service
+        public ProductService(IProductRepository productRepository, IProductRepositoryDapper productRepositoryDapper) // ICustomerRepo injected into Service
         {
             _productRepository = productRepository;
+            _productRepositoryDapper = productRepositoryDapper;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -48,25 +50,25 @@ namespace MusicStore.Platform.Services
         //DAPPER
         public async Task<IEnumerable<Product>> GetAllProductsAsyncByDapper()
         {
-            return await _productRepository.GetAllAsyncByDapper();
+            return await _productRepositoryDapper.GetAllAsyncByDapper();
         }
         public async Task<Product> GetProductByIdAsyncByDapper(int id)
         {
-            return await _productRepository.GetByIdAsyncByDapper(id);
+            return await _productRepositoryDapper.GetByIdAsyncByDapper(id);
         }
         public async Task<int> CreateProductAsyncByDapper(Product product)
         {
-            await _productRepository.AddAsyncByDapper(product);
+            await _productRepositoryDapper.AddAsyncByDapper(product);
             return product.Id;
         }
         public async Task<int> UpdateProductAsyncByDapper(Product product)
         {
-            await _productRepository.UpdateAsyncByDapper(product);
+            await _productRepositoryDapper.UpdateAsyncByDapper(product);
             return product.Id;
         }
         public async Task DeleteProductAsyncByDapper(int id)
         {
-            await _productRepository.DeleteAsyncByDapper(id);
+            await _productRepositoryDapper.DeleteAsyncByDapper(id);
         }
     }
 }

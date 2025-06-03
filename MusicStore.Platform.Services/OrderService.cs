@@ -12,10 +12,12 @@ namespace MusicStore.Platform.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository; //Private Repo injected in here
+        private readonly IOrderRepositoryDapper _orderRepositoryDapper; 
 
-        public OrderService(IOrderRepository orderRepository) // ICustomerRepo injected into Service
+        public OrderService(IOrderRepository orderRepository, IOrderRepositoryDapper orderRepositoryDappercustomerRepository) // ICustomerRepo injected into Service
         {
             _orderRepository = orderRepository;
+            _orderRepositoryDapper = orderRepositoryDappercustomerRepository;
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -48,25 +50,25 @@ namespace MusicStore.Platform.Services
         //DAPPER
         public async Task<IEnumerable<Order>> GetAllOrdersAsyncByDapper()
         {
-            return await _orderRepository.GetAllAsyncByDapper();
+            return await _orderRepositoryDapper.GetAllAsyncByDapper();
         }
         public async Task<Order> GetOrderByIdAsyncByDapper(int id)
         {
-            return await _orderRepository.GetByIdAsyncByDapper(id);
+            return await _orderRepositoryDapper.GetByIdAsyncByDapper(id);
         }
         public async Task<int> CreateOrderAsyncByDapper(Order order)
         {
-            await _orderRepository.AddAsyncByDapper(order);
+            await _orderRepositoryDapper.AddAsyncByDapper(order);
             return order.Id;
         }
         public async Task<int> UpdateOrderAsyncByDapper(Order order)
         {
-            await _orderRepository.UpdateAsyncByDapper(order);
+            await _orderRepositoryDapper.UpdateAsyncByDapper(order);
             return order.Id;
         }
         public async Task DeleteOrderAsyncByDapper(int id)
         {
-            await _orderRepository.DeleteAsyncByDapper(id);
+            await _orderRepositoryDapper.DeleteAsyncByDapper(id);
         }
     }
 }

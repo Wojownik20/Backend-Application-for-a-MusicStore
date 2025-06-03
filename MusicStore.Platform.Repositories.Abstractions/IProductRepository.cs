@@ -12,13 +12,6 @@ namespace MusicStore.Platform.Repositories.Interfaces
         Task<int> AddAsync(Product product);
         Task<int> UpdateAsync(Product product);
         Task DeleteAsync(int id);
-
-        //DAPPER
-        Task<IEnumerable<Product>> GetAllAsyncByDapper();
-        Task<Product> GetByIdAsyncByDapper(int id);
-        Task<int> AddAsyncByDapper(Product product);
-        Task<int> UpdateAsyncByDapper(Product product);
-        Task DeleteAsyncByDapper(int id);
     }
 
 }
