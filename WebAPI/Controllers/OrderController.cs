@@ -2,6 +2,7 @@ using AutoMapper;
 using LeverX.WebAPI.ModelsDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.WebAPI.Features.Customers.Queries;
 using MusicStore.WebAPI.Features.Employees.Queries;
@@ -90,28 +91,16 @@ public class OrderController : ControllerBase //Base class
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
-        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
-        if (customer == null)
-        {
-            return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
-        }
-        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
-        if (product == null)
-        {
-            return NotFound($"Product with ID {orderDto.ProductId} not found.");
-        }
-        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
-        if (employee == null)
-        {
-            return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
-        }
         var order = await _mediator.Send(new GetOrderByIdQuery(id));
-        if (order == null)
-            return NotFound();
-        else
+
+        switch (order)
         {
-            await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
-            return NoContent();
+            case null:
+                return NotFound();
+
+            default:
+                await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
+                return NoContent();
         }
     }
 
@@ -179,28 +168,15 @@ public class OrderController : ControllerBase //Base class
     [HttpPut("dapper/{id}")]
     public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
-        var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
-        if (customer == null)
-        {
-            return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
-        }
-        var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
-        if (product == null)
-        {
-            return NotFound($"Product with ID {orderDto.ProductId} not found.");
-        }
-        var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
-        if (employee == null)
-        {
-            return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
-        }
         var order = await _mediator.Send(new GetOrderByIdQuery(id));
-        if (order == null)
-            return NotFound();
-        else
+        switch (order)
         {
-            await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
-            return NoContent();
+            case null:
+                return NotFound();
+
+            default:
+                await _mediator.Send(new UpdateOrderCommand(id, orderDto.ProductId, orderDto.CustomerId, orderDto.EmployeeId, orderDto.TotalPrice, orderDto.PurchaseDate));
+                return NoContent();
         }
     }
 

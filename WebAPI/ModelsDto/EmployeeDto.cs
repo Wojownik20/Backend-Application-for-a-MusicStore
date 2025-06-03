@@ -2,11 +2,15 @@
 namespace LeverX.WebAPI.ModelsDto;
 
 
-public class EmployeeDto // For REST
+public class EmployeeDto
 {
-    public string Name { get; set; }
-    public DateTime BirthDate { get; set; }
-    public decimal Salary { get; set; }
-}
+    public string Name { get; init; }
+    public DateTime BirthDate { get; init; }
+    public decimal Salary { get; init; } 
+    }
+    
+    
+
+
 
 
