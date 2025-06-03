@@ -1,7 +1,7 @@
 
 using MusicStore.Core.Data;
 
-namespace MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
+namespace MusicStore.Platform.Repositories.Interfaces.EntityFramework;
 
 public interface IEmployeeRepository // This guy is the one and only talking to the DB
 {

@@ -1,11 +1,11 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
+using MusicStore.Platform.Repositories.Interfaces.EntityFramework;
 using MusicStore.Core.Db;
 using MusicStore.Core.Data;
 
 
-namespace MusicStore.Platform.Repositories.EntityFramework_Core
+namespace MusicStore.Platform.Repositories.EntityFramework
 {
     public class EmployeeRepository : IEmployeeRepository //Dependency Inversion Principle
     {
