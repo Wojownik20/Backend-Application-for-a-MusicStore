@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 using MusicStore.Core.Data;
 
 namespace MusicStore.Platform.Services.Interfaces
@@ -11,5 +10,13 @@ namespace MusicStore.Platform.Services.Interfaces
         Task<int> CreateOrderAsync(Order order);
         Task<int> UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(int id);
+
+        //DAPPER
+
+        Task<IEnumerable<Order>> GetAllOrdersAsyncByDapper();
+        Task<Order> GetOrderByIdAsyncByDapper(int id);
+        Task<int> CreateOrderAsyncByDapper(Order order);
+        Task<int> UpdateOrderAsyncByDapper(Order order);
+        Task DeleteOrderAsyncByDapper(int id);
     }
 }

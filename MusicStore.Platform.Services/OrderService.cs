@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MusicStore.Shared.Models;
+
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Core.Data;
-using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.EntityFramework;
+using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
 namespace MusicStore.Platform.Services
 {
@@ -12,10 +10,12 @@ namespace MusicStore.Platform.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository; //Private Repo injected in here
+        private readonly IOrderRepositoryDapper _orderRepositoryDapper; 
 
-        public OrderService(IOrderRepository orderRepository) // ICustomerRepo injected into Service
+        public OrderService(IOrderRepository orderRepository, IOrderRepositoryDapper orderRepositoryDappercustomerRepository) // ICustomerRepo injected into Service
         {
             _orderRepository = orderRepository;
+            _orderRepositoryDapper = orderRepositoryDappercustomerRepository;
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -43,6 +43,30 @@ namespace MusicStore.Platform.Services
         public async Task DeleteOrderAsync(int id)
         {
             await _orderRepository.DeleteAsync(id);
+        }
+
+        //DAPPER
+        public async Task<IEnumerable<Order>> GetAllOrdersAsyncByDapper()
+        {
+            return await _orderRepositoryDapper.GetAllAsync();
+        }
+        public async Task<Order> GetOrderByIdAsyncByDapper(int id)
+        {
+            return await _orderRepositoryDapper.GetByIdAsync(id);
+        }
+        public async Task<int> CreateOrderAsyncByDapper(Order order)
+        {
+            await _orderRepositoryDapper.AddAsync(order);
+            return order.Id;
+        }
+        public async Task<int> UpdateOrderAsyncByDapper(Order order)
+        {
+            await _orderRepositoryDapper.UpdateAsync(order);
+            return order.Id;
+        }
+        public async Task DeleteOrderAsyncByDapper(int id)
+        {
+            await _orderRepositoryDapper.DeleteAsync(id);
         }
     }
 }

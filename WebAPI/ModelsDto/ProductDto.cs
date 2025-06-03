@@ -1,4 +1,4 @@
-using System;
+
 namespace LeverX.WebAPI.ModelsDto;
 public class ProductDto // FOR REST
 {

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.EntityFramework;
 using MusicStore.Core.Db;
 using MusicStore.Core.Data;
 
-namespace MusicStore.Platform.Repositories
+
+
+namespace MusicStore.Platform.Repositories.EntityFramework
 {
     public class OrderRepository : IOrderRepository //Dependency Inversion Principle
     {
@@ -13,6 +14,7 @@ namespace MusicStore.Platform.Repositories
 
         public OrderRepository(MusicStoreContext context) // DB injection, thats what we work on
         {
+
             _context = context;
         }
 
@@ -49,8 +51,6 @@ namespace MusicStore.Platform.Repositories
                 _context.SaveChanges();
             }
         }
+
     }
-
-
-
 }
