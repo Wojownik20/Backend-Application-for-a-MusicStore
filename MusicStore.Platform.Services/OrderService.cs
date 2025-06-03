@@ -1,7 +1,7 @@
 
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Core.Data;
-using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
 using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
 namespace MusicStore.Platform.Services

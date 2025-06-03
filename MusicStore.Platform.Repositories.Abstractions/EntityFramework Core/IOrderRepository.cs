@@ -1,8 +1,8 @@
 
 using MusicStore.Core.Data;
 
-namespace MusicStore.Platform.Repositories.Interfaces
-{
+namespace MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
+
     public interface IOrderRepository // This guy is the one and only talking to the DB
     {
         Task<IEnumerable<Order>> GetAllAsync();
@@ -13,4 +13,3 @@ namespace MusicStore.Platform.Repositories.Interfaces
 
 
     }
-}

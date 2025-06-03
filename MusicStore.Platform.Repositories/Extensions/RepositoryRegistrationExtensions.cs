@@ -1,8 +1,8 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
-using MusicStore.Platform.Repositories;
+using MusicStore.Platform.Repositories.EntityFramework_Core;
 using MusicStore.Platform.Repositories.Dapper;
-using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
 using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
 

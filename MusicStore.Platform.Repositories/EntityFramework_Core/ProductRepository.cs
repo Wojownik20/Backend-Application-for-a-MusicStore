@@ -1,12 +1,12 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.EntityFrameworkCore;
 using MusicStore.Core.Db;
 using MusicStore.Core.Data;
 
 
 
-namespace MusicStore.Platform.Repositories
+namespace MusicStore.Platform.Repositories.EntityFramework_Core
 {
     public class ProductRepository : IProductRepository //Dependency Inversion Principle
     {
