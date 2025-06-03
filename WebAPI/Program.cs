@@ -1,4 +1,8 @@
 using System.Data;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using LeverX.WebAPI.Validators;
+using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Core.Db;
@@ -29,6 +33,11 @@ builder.Services.AddTransient<IDbConnection>(sp =>
 
 builder.Services.AddAutoMapper(typeof(Program)); // MApper configuration
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCustomerCommandValidator>();
+builder.Services.AddFluentValidationAutoValidation(); // Fluent Validation
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>)); // Validation Behaviour
+
+
 //Repositories and Services
 
 
@@ -36,6 +45,7 @@ builder.Services.RegisterPlatformServices();
 builder.Services.RegisterPlatformRepositories();
 
 var app = builder.Build();
+app.UseMiddleware<ValidationExceptionMiddleware>(); // Middleware for validation exceptions
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
