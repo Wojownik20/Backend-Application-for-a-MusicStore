@@ -1,7 +1,7 @@
+using AutoMapper;
 using LeverX.WebAPI.ModelsDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.WebAPI.Features.Customers.Commands;
 using MusicStore.WebAPI.Features.Customers.Queries;
@@ -15,10 +15,12 @@ public class CustomerController : ControllerBase //Base class
 
     private readonly ICustomerService _customerService; // Injecting our DB
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
-    public CustomerController(ICustomerService customerService, IMediator Mediator)
+    private readonly IMapper _mapper; // Injecting AutoMapper 
+    public CustomerController(ICustomerService customerService, IMediator mediator, IMapper mapper)
     {
         _customerService = customerService;
-        _mediator = Mediator;
+        _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -44,12 +46,7 @@ public class CustomerController : ControllerBase //Base class
         if (customer == null)
             return NotFound();
 
-        var customerDto = new CustomerReadDto
-        {
-            Id = customer.Id,
-            Name = customer.Name,
-            BirthDate = customer.BirthDate
-        };
+        var customerDto = _mapper.Map<CustomerReadDto>(customer);
         return Ok(customerDto);
     }
 
@@ -126,12 +123,7 @@ public class CustomerController : ControllerBase //Base class
         if (customer == null)
             return NotFound();
 
-        var customerDto = new CustomerReadDto
-        {
-            Id = customer.Id,
-            Name = customer.Name,
-            BirthDate = customer.BirthDate
-        };
+        var customerDto = _mapper.Map<CustomerReadDto>(customer);
         return Ok(customerDto);
     }
 

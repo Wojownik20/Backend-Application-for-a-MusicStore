@@ -1,3 +1,4 @@
+using AutoMapper;
 using LeverX.WebAPI.ModelsDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ public class EmployeeController : ControllerBase //Base class
 {
     private readonly IEmployeeService _employeeService; // Injecting our DB
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
-    public EmployeeController(IEmployeeService employeeService, IMediator mediator)
+    private readonly IMapper _mapper; // Injecting AutoMapper
+    public EmployeeController(IEmployeeService employeeService, IMediator mediator, IMapper mapper)
     {
         _employeeService = employeeService;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
 
@@ -43,13 +46,7 @@ public class EmployeeController : ControllerBase //Base class
         if (employee == null)
             return NotFound();
 
-        var employeeDto = new EmployeeReadDto
-        {
-            Id = employee.Id,
-            Name = employee.Name,
-            BirthDate = employee.BirthDate,
-            Salary = employee.Salary
-        };
+        var employeeDto = _mapper.Map<EmployeeReadDto>(employee);
         return Ok(employeeDto);
     }
 
@@ -127,13 +124,7 @@ public class EmployeeController : ControllerBase //Base class
         if (employee == null)
             return NotFound();
 
-        var employeeDto = new EmployeeReadDto
-        {
-            Id = employee.Id,
-            Name = employee.Name,
-            BirthDate = employee.BirthDate,
-            Salary = employee.Salary
-        };
+        var employeeDto = _mapper.Map<EmployeeReadDto>(employee);
         return Ok(employeeDto);
     }
 

@@ -1,10 +1,8 @@
-﻿using LeverX.WebAPI.ModelsDto;
+﻿using AutoMapper;
+using LeverX.WebAPI.ModelsDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
-using MusicStore.WebAPI.Features.Employees.Commands;
-using MusicStore.WebAPI.Features.Employees.Queries;
 using MusicStore.WebAPI.Features.Products.Commands;
 using MusicStore.WebAPI.Features.Products.Queries;
 using WebAPI.ModelsDto;
@@ -17,10 +15,12 @@ public class ProductController : ControllerBase //Base class
 {
     private readonly IProductService _productService; // Injecting our DB
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
-    public ProductController(IProductService productService, IMediator mediator)
+    private readonly IMapper _mapper; // Injecting AutoMapper
+    public ProductController(IProductService productService, IMediator mediator, IMapper mapper) 
     {
         _productService = productService;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
 
@@ -47,15 +47,7 @@ public class ProductController : ControllerBase //Base class
         if (product == null)
             return NotFound();
 
-        var productDto = new ProductReadDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Category = product.Category,
-            Price = product.Price,
-            ReleaseDate = product.ReleaseDate
-
-        };
+        var productDto = _mapper.Map<ProductReadDto>(product);
         return Ok(productDto);
     }
 
@@ -133,15 +125,7 @@ public class ProductController : ControllerBase //Base class
         if (product == null)
             return NotFound();
 
-        var productDto = new ProductReadDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Category = product.Category,
-            Price = product.Price,
-            ReleaseDate = product.ReleaseDate
-
-        };
+        var productDto = _mapper.Map<ProductReadDto>(product);
         return Ok(productDto);
     }
 

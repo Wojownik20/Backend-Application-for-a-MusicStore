@@ -1,10 +1,9 @@
+using AutoMapper;
 using LeverX.WebAPI.ModelsDto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.WebAPI.Features.Customers.Queries;
-using MusicStore.WebAPI.Features.Employees.Commands;
 using MusicStore.WebAPI.Features.Employees.Queries;
 using MusicStore.WebAPI.Features.Orders.Commands;
 using MusicStore.WebAPI.Features.Orders.Queries;
@@ -19,10 +18,12 @@ public class OrderController : ControllerBase //Base class
 {
     private readonly IOrderService _orderService; // Injecting our DB
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
-    public OrderController(IOrderService orderService, IMediator mediator)
+    private readonly IMapper _mapper; // Injecting AutoMapper
+    public OrderController(IOrderService orderService, IMediator mediator, IMapper mapper)
     {
         _orderService = orderService;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -48,14 +49,7 @@ public class OrderController : ControllerBase //Base class
         if (order == null)
             return NotFound();
 
-        var orderDto = new OrderReadDto
-        {
-            ProductId = order.ProductId,
-            CustomerId = order.CustomerId,
-            EmployeeId = order.EmployeeId,
-            TotalPrice = order.TotalPrice,
-            PurchaseDate = order.PurchaseDate
-        };
+        var orderDto = _mapper.Map<OrderReadDto>(order);
         return Ok(orderDto);
     }
 
@@ -154,14 +148,7 @@ public class OrderController : ControllerBase //Base class
         if (order == null)
             return NotFound();
 
-        var orderDto = new OrderReadDto
-        {
-            ProductId = order.ProductId,
-            CustomerId = order.CustomerId,
-            EmployeeId = order.EmployeeId,
-            TotalPrice = order.TotalPrice,
-            PurchaseDate = order.PurchaseDate
-        };
+        var orderDto = _mapper.Map<OrderReadDto>(order);
         return Ok(orderDto);
     }
 
