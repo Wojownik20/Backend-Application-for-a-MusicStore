@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MusicStore.Shared.Models;
+
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Core.Data;
 using MusicStore.Platform.Repositories.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
 namespace MusicStore.Platform.Services
 {
@@ -50,25 +48,25 @@ namespace MusicStore.Platform.Services
         //DAPPER
         public async Task<IEnumerable<Order>> GetAllOrdersAsyncByDapper()
         {
-            return await _orderRepositoryDapper.GetAllAsyncByDapper();
+            return await _orderRepositoryDapper.GetAllAsync();
         }
         public async Task<Order> GetOrderByIdAsyncByDapper(int id)
         {
-            return await _orderRepositoryDapper.GetByIdAsyncByDapper(id);
+            return await _orderRepositoryDapper.GetByIdAsync(id);
         }
         public async Task<int> CreateOrderAsyncByDapper(Order order)
         {
-            await _orderRepositoryDapper.AddAsyncByDapper(order);
+            await _orderRepositoryDapper.AddAsync(order);
             return order.Id;
         }
         public async Task<int> UpdateOrderAsyncByDapper(Order order)
         {
-            await _orderRepositoryDapper.UpdateAsyncByDapper(order);
+            await _orderRepositoryDapper.UpdateAsync(order);
             return order.Id;
         }
         public async Task DeleteOrderAsyncByDapper(int id)
         {
-            await _orderRepositoryDapper.DeleteAsyncByDapper(id);
+            await _orderRepositoryDapper.DeleteAsync(id);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Microsoft.Extensions.DependencyInjection;
 using MusicStore.Platform.Repositories;
+using MusicStore.Platform.Repositories.Dapper;
 using MusicStore.Platform.Repositories.Interfaces;
-using MusicStore.Platform.Services;
-using MusicStore.Platform.Services.Interfaces;
+using MusicStore.Platform.Repositories.Interfaces.Dapper;
+
 
 namespace MusicStore.Platform.Services.Extensions
 {

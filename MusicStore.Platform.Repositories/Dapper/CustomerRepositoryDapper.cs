@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
-using MusicStore.Platform.Repositories.Interfaces;
-using MusicStore.Core.Db;
 using MusicStore.Core.Data;
 using Dapper;
 using System.Data;
+using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
-namespace MusicStore.Platform.Repositories
+namespace MusicStore.Platform.Repositories.Dapper
 {
     public class CustomerRepositoryDapper : ICustomerRepositoryDapper //Dependency Inversion Principle
     {
@@ -19,35 +17,35 @@ namespace MusicStore.Platform.Repositories
         }
 
 
-        public async Task<IEnumerable<Customer>> GetAllAsyncByDapper()
+        public async Task<IEnumerable<Customer>> GetAllAsync()
         {
             var sql = "SELECT * FROM Customers"; 
             return await _dbConnection.QueryAsync<Customer>(sql);
         }
 
 
-        public async Task<Customer> GetByIdAsyncByDapper(int id)
+        public async Task<Customer> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Customers WHERE Id = @Id"; 
             return await _dbConnection.QueryFirstOrDefaultAsync<Customer>(sql, new { Id = id });
         }
 
 
-        public async Task<int> AddAsyncByDapper(Customer customer)
+        public async Task<int> AddAsync(Customer customer)
         {
             var sql = "INSERT INTO Customers (Name, BirthDate) VALUES (@Name, @BirthDate); SELECT CAST(SCOPE_IDENTITY() as int)"; 
             return await _dbConnection.QuerySingleAsync<int>(sql, customer);
         }
 
 
-        public async Task<int> UpdateAsyncByDapper(Customer customer)
+        public async Task<int> UpdateAsync(Customer customer)
         {
             var sql = "UPDATE Customers SET Name = @Name, BirthDate = @BirthDate WHERE Id = @Id"; 
             return await _dbConnection.ExecuteAsync(sql, customer);
         }
 
 
-        public async Task DeleteAsyncByDapper(int id)
+        public async Task DeleteAsync(int id)
         {
             var sql = "DELETE FROM Customers WHERE Id = @Id"; 
             await _dbConnection.ExecuteAsync(sql, new { Id = id });

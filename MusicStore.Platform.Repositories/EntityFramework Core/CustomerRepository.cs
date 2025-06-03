@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Platform.Repositories.Interfaces;
 using MusicStore.Core.Db;
 using MusicStore.Core.Data;
-using System.Data;
+
 
 namespace MusicStore.Platform.Repositories
 {

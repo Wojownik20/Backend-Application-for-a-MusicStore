@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using MusicStore.Core.Data;
 using MusicStore.Platform.Services.Interfaces;
 using MusicStore.Platform.Repositories.Interfaces;
 using System.Data;
+using MusicStore.Platform.Repositories.Interfaces.Dapper;
 
 namespace MusicStore.Platform.Services
 {
@@ -48,25 +48,25 @@ namespace MusicStore.Platform.Services
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsyncByDapper()
         {
-            return await _employeeRepositoryDapper.GetAllAsyncByDapper();
+            return await _employeeRepositoryDapper.GetAllAsync();
         }
         public async Task<Employee> GetEmployeeByIdAsyncByDapper(int id)
         {
-            return await _employeeRepositoryDapper.GetByIdAsyncByDapper(id); // Async getting list of customers
+            return await _employeeRepositoryDapper.GetByIdAsync(id); // Async getting list of customers
         }
         public async Task<int> CreateEmployeeAsyncByDapper(Employee employee)
         {
-            await _employeeRepositoryDapper.AddAsyncByDapper(employee);
+            await _employeeRepositoryDapper.AddAsync(employee);
             return employee.Id;
         }
         public async Task<int> UpdateEmployeeAsyncByDapper(Employee employee)
         {
-            await _employeeRepositoryDapper.UpdateAsyncByDapper(employee);
+            await _employeeRepositoryDapper.UpdateAsync(employee);
             return employee.Id;
         }
         public async Task DeleteEmployeeAsyncByDapper(int id)
         {
-            await _employeeRepositoryDapper.DeleteAsyncByDapper(id);
+            await _employeeRepositoryDapper.DeleteAsync(id);
         }
     }
 

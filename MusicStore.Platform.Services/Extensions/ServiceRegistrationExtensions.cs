@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Microsoft.Extensions.DependencyInjection;
-using MusicStore.Platform.Services;
 using MusicStore.Platform.Services.Interfaces;
 
 namespace MusicStore.Platform.Services.Extensions;

@@ -2,11 +2,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Core.Db;
-using MusicStore.Platform.Repositories;
-using MusicStore.Platform.Repositories.Interfaces;
-using MusicStore.Platform.Services;
 using MusicStore.Platform.Services.Extensions;
-using MusicStore.Platform.Services.Interfaces;  
+
 
 var builder = WebApplication.CreateBuilder(args);
 

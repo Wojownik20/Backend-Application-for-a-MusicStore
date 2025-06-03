@@ -1,4 +1,4 @@
-using System;
+
 namespace LeverX.WebAPI.ModelsDto;
 public class OrderDto // FOR REST
 {
