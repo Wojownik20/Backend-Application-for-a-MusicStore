@@ -1,5 +1,4 @@
-
-namespace LeverX.WebAPI.ModelsDto;
+namespace LeverX.WebAPI.Features.Employees.Dto;
 
 
 public class EmployeeDto

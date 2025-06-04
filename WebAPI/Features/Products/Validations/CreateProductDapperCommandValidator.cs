@@ -2,7 +2,7 @@
 using MusicStore.WebAPI.Features.Products.Commands;
 
 
-namespace LeverX.WebAPI.Validators
+namespace LeverX.WebAPI.Features.Products.Validations
 {
     public class CreateProductDapperCommandValidator : AbstractValidator<CreateProductCommand>
     {
@@ -13,7 +13,8 @@ namespace LeverX.WebAPI.Validators
             RuleFor(x => x.Category)
                 .NotEmpty();
             RuleFor(x => x.Price)
-                .NotEmpty();
+                .NotEmpty()
+                .GreaterThan(0);
             RuleFor(x => x.ReleaseDate)
                 .NotEmpty()
                 .LessThanOrEqualTo(DateTime.Now)

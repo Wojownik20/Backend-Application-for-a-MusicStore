@@ -1,12 +1,14 @@
 using System.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using LeverX.WebAPI.Features.Customers.Validations;
 using LeverX.WebAPI.Validators;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Core.Db;
 using MusicStore.Platform.Services.Extensions;
+using LeverX.WebAPI.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);

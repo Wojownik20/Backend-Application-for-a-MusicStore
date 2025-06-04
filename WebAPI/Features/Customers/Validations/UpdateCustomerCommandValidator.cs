@@ -1,15 +1,16 @@
 ﻿using FluentValidation;
 using MusicStore.WebAPI.Features.Customers.Commands;
 
-namespace LeverX.WebAPI.Validators
+namespace LeverX.WebAPI.Features.Customers.Validations
 {
-    public class CreateCustomerDapperCommandValidator : AbstractValidator<CreateCustomerCommand>
+    public class UpdateCustomerCommandValidator : AbstractValidator<UpdateCustomerCommand>
     {
-        public CreateCustomerDapperCommandValidator()
+        private const int MinNameLength = 10;
+        public UpdateCustomerCommandValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .MinimumLength(8);
+                .MinimumLength(MinNameLength);
             RuleFor(x => x.BirthDate)
                 .NotEmpty()
                 .LessThan(DateTime.Today)

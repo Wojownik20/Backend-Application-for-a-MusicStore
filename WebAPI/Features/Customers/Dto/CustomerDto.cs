@@ -1,5 +1,4 @@
-
-namespace LeverX.WebAPI.ModelsDto;
+namespace LeverX.WebAPI.Features.Customers.Dto;
 public class CustomerDto
 {
     public string Name { get; init; } 

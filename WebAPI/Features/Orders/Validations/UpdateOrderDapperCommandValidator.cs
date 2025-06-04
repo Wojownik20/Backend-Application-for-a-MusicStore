@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
 using MusicStore.WebAPI.Features.Orders.Commands;
 
-namespace LeverX.WebAPI.Validators
+namespace LeverX.WebAPI.Features.Orders.Validations
 {
-    public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+    public class UpdateOrderDapperCommandValidator : AbstractValidator<UpdateOrderCommand>
     {
-        public CreateOrderCommandValidator()
+        public UpdateOrderDapperCommandValidator()
         {
             RuleFor(x => x.TotalPrice)
-                .NotEmpty();
+                .NotEmpty()
+                .GreaterThan(0);
             RuleFor(y => y.PurchaseDate)
                 .NotEmpty()
                 .LessThan(DateTime.Today)
