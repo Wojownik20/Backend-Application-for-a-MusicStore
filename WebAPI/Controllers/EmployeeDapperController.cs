@@ -8,12 +8,12 @@ using MusicStore.WebAPI.Features.Employees.Queries;
 namespace LeverX.WebAPI.Controllers;
 
 [ApiController] //Tells ASP.NET that its a Controller
-[Route("api/employee")] // Route for api/product
-public class EmployeeController : ControllerBase //Base class
+[Route("api/employee/dapper")] // Route for api/product
+public class EmployeeDapperController : ControllerBase //Base class
 {
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
     private readonly IMapper _mapper; // Injecting AutoMapper
-    public EmployeeController( IMediator mediator, IMapper mapper)
+    public EmployeeDapperController( IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
@@ -21,23 +21,23 @@ public class EmployeeController : ControllerBase //Base class
 
 
     /// <summary>
-    /// Gets all employees
+    /// Returns JSON list of Employees by Dapper
     /// </summary>
-    /// <returns>200 and JSON list of Employees</returns>
+    /// <returns>OK 200</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetAllAsync() // WebAPI changed for Db
+    public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetAllAsyncByDapper() 
     {
-        var employee = await _mediator.Send(new GetAllEmployeesQuery());
-        return Ok(employee);
+        var employees = await _mediator.Send(new GetAllEmployeesQuery());
+        return Ok(employees);
     }
 
     /// <summary>
-    /// Gets Employee by id
+    /// Return employee by Id by Dapper
     /// </summary>
-    /// <param name="id">Id of the employee</param>
-    /// <returns>200 if Employee found by id, 404 if id not found</returns>
+    /// <param name="id">Employee Id</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<EmployeeReadDto>> GetById([FromRoute] int id)
+    public async Task<ActionResult<EmployeeReadDto>> GetByIdByDapper([FromRoute] int id)
     {
         var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
@@ -48,25 +48,25 @@ public class EmployeeController : ControllerBase //Base class
     }
 
     /// <summary>
-    /// Creates an Employee
+    /// Creates an Employee by Dapper
     /// </summary>
-    /// <param name="newEmployee">New employee</param>
-    /// <returns>201 when Employee created</returns>
+    /// <param name="employeeDto">Employee Model</param>
+    /// <returns>200 OK</returns>
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] EmployeeDto employeeDto)
+    public async Task<IActionResult> CreateByDapper([FromBody] EmployeeDto employeeDto)
     {
         await _mediator.Send(new CreateEmployeeCommand(employeeDto.Name, employeeDto.BirthDate, employeeDto.Salary));
         return Ok();
     }
 
     /// <summary>
-    /// Updates an Employee record
+    /// Updates an Employee by Dapper
     /// </summary>
-    /// <param name="id">id of employee</param>
-    /// <param name="updatedEmployee">Updated Employee</param>
-    /// <returns>204 if updated succesfuly, 404 if id not found</returns>
+    /// <param name="id">Employee Id</param>
+    /// <param name="employeeDto">Employee model</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
+    public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] EmployeeDto employeeDto)
     {
         var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
@@ -79,12 +79,12 @@ public class EmployeeController : ControllerBase //Base class
     }
 
     /// <summary>
-    /// Delete an employee
+    /// Deletes an Employee by Dapper
     /// </summary>
-    /// <param name="id">id of an employee</param>
-    /// <returns>204 if deletion successful, 404 if id not found</returns>
+    /// <param name="id">EmployeeId</param>
+    /// <returns>200 OK or 404 NOT FOUND</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
         var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
         if (employee == null)
@@ -96,4 +96,5 @@ public class EmployeeController : ControllerBase //Base class
         }
 
     }
+
 }

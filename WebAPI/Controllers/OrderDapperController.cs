@@ -11,35 +11,27 @@ using MusicStore.WebAPI.Features.Products.Queries;
 namespace LeverX.WebAPI.Controllers;
 
 [ApiController] //Tells ASP.NET that its a Controller
-[Route("api/order")] // Route for api/product
-public class OrderController : ControllerBase //Base class
+[Route("api/order/dapper")] // Route for api/product
+public class OrderDapperController : ControllerBase //Base class
 {
     private readonly IMediator _mediator; // Injecting MediatR for CQRS
     private readonly IMapper _mapper; // Injecting AutoMapper
-    public OrderController( IMediator mediator, IMapper mapper)
+    public OrderDapperController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Returns a list of Orders
-    /// </summary>
-    /// <returns>200 and JSON list of Orders</returns>
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAllAsync() // WebAPI changed for Db
+    public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAllAsyncByDapper()
     {
         var order = await _mediator.Send(new GetAllOrdersQuery());
         return Ok(order);
     }
 
-    /// <summary>
-    /// Returns Order by ID
-    /// </summary>
-    /// <param name="id">Id of Order</param>
-    /// <returns>200 and a order, 404 if id not found</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrderReadDto>> GetById([FromRoute] int id)
+    public async Task<ActionResult<OrderReadDto>> GetByIdByDapper([FromRoute] int id)
     {
         var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
@@ -49,13 +41,9 @@ public class OrderController : ControllerBase //Base class
         return Ok(orderDto);
     }
 
-    /// <summary>
-    /// Creates new order
-    /// </summary>
-    /// <param name="newOrder">New order</param>
-    /// <returns>201 when order created</returns>
+
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] OrderDto orderDto)
+    public async Task<IActionResult> CreateByDapper([FromBody] OrderDto orderDto)
     {
         var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
         if (customer == null)
@@ -63,12 +51,12 @@ public class OrderController : ControllerBase //Base class
             return NotFound($"Customer with ID {orderDto.CustomerId} not found.");
         }
         var product = await _mediator.Send(new GetProductByIdQuery(orderDto.ProductId));
-        if (product==null)
+        if (product == null)
         {
             return NotFound($"Product with ID {orderDto.ProductId} not found.");
         }
         var employee = await _mediator.Send(new GetEmployeeByIdQuery(orderDto.EmployeeId));
-        if (employee==null)
+        if (employee == null)
         {
             return NotFound($"Employee with ID {orderDto.EmployeeId} not found.");
         }
@@ -77,14 +65,8 @@ public class OrderController : ControllerBase //Base class
         return Ok();
     }
 
-    /// <summary>
-    /// Updates the order by id
-    /// </summary>
-    /// <param name="id">Id of the order</param>
-    /// <param name="updatedOrder">Updated order</param>
-    /// <returns>204 if Order updated, 404 if id not found</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrderDto orderDto)
+    public async Task<IActionResult> UpdateByDapper([FromRoute] int id, [FromBody] OrderDto orderDto)
     {
         var customer = await _mediator.Send(new GetCustomerByIdQuery(orderDto.CustomerId));
         if (customer == null)
@@ -111,13 +93,8 @@ public class OrderController : ControllerBase //Base class
         }
     }
 
-    /// <summary>
-    /// Deleting Orders by id
-    /// </summary>
-    /// <param name="id">id of the order</param>
-    /// <returns>204 if order deleted, 404 if id not found</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> DeleteByDapper([FromRoute] int id)
     {
         var order = await _mediator.Send(new GetOrderByIdQuery(id));
         if (order == null)
@@ -128,5 +105,4 @@ public class OrderController : ControllerBase //Base class
             return NoContent();
         }
     }
-
 }
