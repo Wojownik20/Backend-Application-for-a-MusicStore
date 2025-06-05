@@ -1,5 +1,5 @@
 namespace LeverX.WebAPI.Features.Orders.Dto;
-public class OrderDto
+public record OrderDto
 {
     public int ProductId { get; init; }
     public int CustomerId { get; init; }

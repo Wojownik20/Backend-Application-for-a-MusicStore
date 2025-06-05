@@ -1,5 +1,5 @@
 namespace LeverX.WebAPI.Features.Products.Dto;
-public class ProductDto
+public record ProductDto
 {
     public string Name { get; init; }
     public string Category { get; init; } 

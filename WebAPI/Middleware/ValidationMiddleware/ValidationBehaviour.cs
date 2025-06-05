@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace LeverX.WebAPI.Validators
+namespace LeverX.WebAPI.Middleware.ValidationMiddleware
 {
     public class  ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json;
 
-namespace LeverX.WebAPI.Middleware;
+namespace LeverX.WebAPI.Middleware.ValidationMiddleware;
 
 public class ValidationExceptionMiddleware
 {
