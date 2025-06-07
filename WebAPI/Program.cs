@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "LeverX", Version = "v1" });
 
-    // 🔐 JWT support
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -56,6 +56,12 @@ builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.RegisterPlatformServices();
 builder.Services.RegisterPlatformRepositories();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("PremiumOnly", policy =>
+        policy.RequireClaim("IsPremiumUser", "True"));
+});
 
 var app = builder.Build();
 app.UseMiddleware<ValidationExceptionMiddleware>();

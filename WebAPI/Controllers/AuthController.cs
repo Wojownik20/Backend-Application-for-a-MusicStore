@@ -24,6 +24,11 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
+    /// <summary>
+    /// Register endpoint for users
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     [HttpPost("register")]
     public IActionResult Register([FromBody] RegisterDto dto)
     {
@@ -41,6 +46,11 @@ public class AuthController : ControllerBase
         return Ok("User registered");
     }
 
+    /// <summary>
+    /// Login endpoint for users
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDto dto)
     {
@@ -61,6 +71,10 @@ public class AuthController : ControllerBase
         });
     }
 
+    /// <summary>
+    /// Return Users Name if User is authenticated
+    /// </summary>
+    /// <returns></returns>
     [Authorize]
     [HttpGet("secret")]
     public IActionResult SecretData()
@@ -69,6 +83,32 @@ public class AuthController : ControllerBase
         return Ok($"Access granted for user: {username}");
     }
 
+    /// <summary>
+    /// For every User with Id%==0 returns 200 True
+    /// </summary>
+    /// <returns></returns>
+    [Authorize(Policy = "PremiumOnly")]
+    [HttpGet("vip-only")]
+    public IActionResult PremiumStuff()
+    {
+        return Ok("You are a premium user!");
+    }
+    /// <summary>
+    /// Gives info about current User
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    [HttpGet("Info")]
+    public IActionResult Info()
+    {
+        return Ok(User.Claims.Select(c => new { c.Type, c.Value }));
+    }
+
+    /// <summary>
+    /// Checks Users refresh token
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
     [HttpPost("refresh")]
     public IActionResult RefreshToken([FromBody] string refreshToken)
     {
@@ -92,12 +132,17 @@ public class AuthController : ControllerBase
         });
     }
 
+
     private string GenerateJwtToken(User user)
     {
         var claims = new[]
         {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+
+                // Additional Claims
+                new Claim("IsPremiumUser", (user.Id % 2 == 0).ToString()), 
+                new Claim("Department", "Engineering")
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
