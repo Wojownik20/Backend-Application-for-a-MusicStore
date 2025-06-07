@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using LeverX.WebAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -47,8 +48,17 @@ public class AuthController : ControllerBase
         if (user is null || !PasswordHasher.Verify(dto.Password, user.Password))
             return Unauthorized("Invalid credentials");
 
-        var token = GenerateJwtToken(user);
-        return Ok(new { token });
+        var accessToken = GenerateJwtToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
+
+        return Ok(new
+        {
+            accessToken,
+            refreshToken
+        });
     }
 
     [Authorize]
@@ -57,6 +67,29 @@ public class AuthController : ControllerBase
     {
         var username = User.Identity?.Name;
         return Ok($"Access granted for user: {username}");
+    }
+
+    [HttpPost("refresh")]
+    public IActionResult RefreshToken([FromBody] string refreshToken)
+    {
+        var user = _users.FirstOrDefault(u =>
+            u.RefreshToken == refreshToken &&
+            u.RefreshTokenExpiryTime > DateTime.UtcNow);
+
+        if (user is null)
+            return Unauthorized("Invalid or expired refresh token");
+
+        var newAccessToken = GenerateJwtToken(user);
+        var newRefreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
+
+        return Ok(new
+        {
+            accessToken = newAccessToken,
+            refreshToken = newRefreshToken
+        });
     }
 
     private string GenerateJwtToken(User user)
@@ -79,5 +112,9 @@ public class AuthController : ControllerBase
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+    private string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
 }
