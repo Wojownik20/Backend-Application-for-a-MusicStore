@@ -31,10 +31,9 @@ public class AuthController : ControllerBase
 
         var user = new User
         {
-            Id = _users.Count + 1,
             Username = dto.Username,
             Password = PasswordHasher.Hash(dto.Password),
-            Role = "User"
+            Role = MusicStore.Shared.Models.UserRole.User
         };
 
         _users.Add(user);
@@ -65,7 +64,7 @@ public class AuthController : ControllerBase
         var claims = new[]
         {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
