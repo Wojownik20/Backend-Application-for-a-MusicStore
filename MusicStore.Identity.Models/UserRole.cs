@@ -1,4 +1,4 @@
-﻿namespace MusicStore.Shared.Models;
+﻿namespace MusicStore.Identity.Models;
 
 public enum UserRole
 {

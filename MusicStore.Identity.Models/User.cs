@@ -1,6 +1,6 @@
 ﻿
 
-namespace MusicStore.Shared.Models.JWT_Authentication
+namespace MusicStore.Identity.Models
 {
     public record User
     {
@@ -8,8 +8,5 @@ namespace MusicStore.Shared.Models.JWT_Authentication
         public string Username { get; init; }
         public string Password { get; init; }
         public UserRole Role { get; init; } = UserRole.User;
-
-        public string RefreshToken { get; set; }
-        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

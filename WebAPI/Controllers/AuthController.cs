@@ -3,11 +3,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using LeverX.WebAPI.Features.JWT.Dto;
 using LeverX.WebAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
-using MusicStore.Shared.Models.JWT_Authentication;
+using MusicStore.Identity.Models;
+using RegisterDto = LeverX.WebAPI.Features.JWT.Dto.RegisterDto;
 
 
 namespace LeverX.WebAPI.Controllers;
@@ -17,6 +20,7 @@ namespace LeverX.WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private static List<User> _users = new();
+    private static List<RefreshToken> _refreshTokens = new();
     private readonly IConfiguration _configuration;
 
     public AuthController(IDbConnection dbConnection, IConfiguration configuration)
@@ -39,7 +43,7 @@ public class AuthController : ControllerBase
         {
             Username = dto.Username,
             Password = PasswordHasher.Hash(dto.Password),
-            Role = MusicStore.Shared.Models.UserRole.User
+            Role = MusicStore.Identity.Models.UserRole.User
         };
 
         _users.Add(user);
@@ -61,8 +65,12 @@ public class AuthController : ControllerBase
         var accessToken = GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
 
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
+        _refreshTokens.Add(new RefreshToken
+        {
+            Token = refreshToken,
+            UserId = user.Id,
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10)
+        });
 
         return Ok(new
         {
@@ -112,24 +120,29 @@ public class AuthController : ControllerBase
     [HttpPost("refresh")]
     public IActionResult RefreshToken([FromBody] string refreshToken)
     {
-        var user = _users.FirstOrDefault(u =>
-            u.RefreshToken == refreshToken &&
-            u.RefreshTokenExpiryTime > DateTime.UtcNow);
+        var tokenEntry = _refreshTokens.FirstOrDefault(rt =>
+        rt.Token == refreshToken &&
+        rt.RefreshTokenExpiryTime > DateTime.UtcNow);
 
+        if (tokenEntry is null)
+            return Unauthorized("Invalid or expired token");
+
+        var user = _users.FirstOrDefault(u => u.Id == tokenEntry.UserId);
         if (user is null)
-            return Unauthorized("Invalid or expired refresh token");
+            return Unauthorized("User not found");
 
         var newAccessToken = GenerateJwtToken(user);
         var newRefreshToken = GenerateRefreshToken();
 
-        user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
+        tokenEntry.Token = newRefreshToken;
+        tokenEntry.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
 
         return Ok(new
         {
             accessToken = newAccessToken,
             refreshToken = newRefreshToken
         });
+
     }
 
 

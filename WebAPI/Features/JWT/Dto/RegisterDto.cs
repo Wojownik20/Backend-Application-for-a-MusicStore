@@ -1,6 +1,4 @@
-﻿
-
-namespace MusicStore.Shared.Models.JWT_Authentication
+﻿namespace LeverX.WebAPI.Features.JWT.Dto
 {
     public record RegisterDto
     {

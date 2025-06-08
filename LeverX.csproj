@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Remove="MusicStore.Core.Data\**" />
     <Compile Remove="MusicStore.Core.Db\**" />
+    <Compile Remove="MusicStore.Identity.Models\**" />
     <Compile Remove="MusicStore.Platform.Interfaces\**" />
     <Compile Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Compile Remove="MusicStore.Platform.Repositories\**" />
@@ -20,6 +21,7 @@
     <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
     <Content Remove="MusicStore.Core.Data\**" />
     <Content Remove="MusicStore.Core.Db\**" />
+    <Content Remove="MusicStore.Identity.Models\**" />
     <Content Remove="MusicStore.Platform.Interfaces\**" />
     <Content Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Content Remove="MusicStore.Platform.Repositories\**" />
@@ -28,6 +30,7 @@
     <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
     <EmbeddedResource Remove="MusicStore.Core.Data\**" />
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
+    <EmbeddedResource Remove="MusicStore.Identity.Models\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Interfaces\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories\**" />
@@ -36,6 +39,7 @@
     <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
     <None Remove="MusicStore.Core.Data\**" />
     <None Remove="MusicStore.Core.Db\**" />
+    <None Remove="MusicStore.Identity.Models\**" />
     <None Remove="MusicStore.Platform.Interfaces\**" />
     <None Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <None Remove="MusicStore.Platform.Repositories\**" />
@@ -63,6 +67,7 @@
   <ItemGroup>
     <ProjectReference Include="MusicStore.Core.Data\MusicStore.Core.Data.csproj" />
     <ProjectReference Include="MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
+    <ProjectReference Include="MusicStore.Identity.Models\MusicStore.Identity.Models.csproj" />
     <ProjectReference Include="MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj" />
