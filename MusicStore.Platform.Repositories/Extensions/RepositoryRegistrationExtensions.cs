@@ -21,6 +21,9 @@ namespace MusicStore.Platform.Services.Extensions
             services.AddScoped<IEmployeeRepositoryDapper, EmployeeRepositoryDapper>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductRepositoryDapper, ProductRepositoryDapper>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
 
         }
 

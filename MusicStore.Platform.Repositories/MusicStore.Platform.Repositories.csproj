@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
+    <ProjectReference Include="..\MusicStore.Identity.Db\MusicStore.Identity.Db.csproj" />
+    <ProjectReference Include="..\MusicStore.Identity.Models\MusicStore.Identity.Models.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="..\MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />

@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MusicStore.Core.Db;
+using MusicStore.Identity.Db;
 
 namespace LeverX.WebAPI.Extensions;
 
@@ -32,6 +33,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext<MusicStoreContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<IdentityDbContext>(options =>
+    options.UseSqlite(configuration.GetConnectionString("IdentityConnection")));
+
+
 
         return services;
     }

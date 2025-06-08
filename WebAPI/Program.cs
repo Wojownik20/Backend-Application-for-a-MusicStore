@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-using MusicStore.Platform.Services.Extensions;
+﻿using LeverX.WebAPI.Extensions;
 using LeverX.WebAPI.Middleware.ValidationMiddleware;
-using LeverX.WebAPI.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using MusicStore.Identity.Db;
+using MusicStore.Platform.Services.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +55,7 @@ builder.Services.RegisterDbContext(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
+
 
 builder.Services.RegisterPlatformServices();
 builder.Services.RegisterPlatformRepositories();

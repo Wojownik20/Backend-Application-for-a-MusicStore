@@ -3,8 +3,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using LeverX.WebAPI.Features.Authentication.Commands;
 using LeverX.WebAPI.Features.JWT.Dto;
 using LeverX.WebAPI.Helpers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -19,65 +21,37 @@ namespace LeverX.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private static List<User> _users = new();
-    private static List<RefreshToken> _refreshTokens = new();
-    private readonly IConfiguration _configuration;
-
-    public AuthController(IDbConnection dbConnection, IConfiguration configuration)
+    private readonly IMediator _mediator;
+    public AuthController(IMediator mediator)
     {
-        _configuration = configuration;
+        _mediator = mediator;
     }
 
     /// <summary>
     /// Register endpoint for users
     /// </summary>
-    /// <param name="dto"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterDto dto)
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
-        if (_users.Any(u => u.Username == dto.Username))
-            return BadRequest("User already exists");
-
-        var user = new User
-        {
-            Username = dto.Username,
-            Password = PasswordHasher.Hash(dto.Password),
-            Role = MusicStore.Identity.Models.UserRole.User
-        };
-
-        _users.Add(user);
-        return Ok("User registered");
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
+
 
     /// <summary>
     /// Login endpoint for users
     /// </summary>
-    /// <param name="dto"></param>
+    /// <param name="query"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginDto dto)
+    public async Task<IActionResult> Login([FromBody] LoginUserQuery query)
     {
-        var user = _users.FirstOrDefault(u => u.Username == dto.Username);
-        if (user is null || !PasswordHasher.Verify(dto.Password, user.Password))
-            return Unauthorized("Invalid credentials");
-
-        var accessToken = GenerateJwtToken(user);
-        var refreshToken = GenerateRefreshToken();
-
-        _refreshTokens.Add(new RefreshToken
-        {
-            Token = refreshToken,
-            UserId = user.Id,
-            RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10)
-        });
-
-        return Ok(new
-        {
-            accessToken,
-            refreshToken
-        });
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
+
 
     /// <summary>
     /// Return Users Name if User is authenticated
@@ -118,61 +92,10 @@ public class AuthController : ControllerBase
     /// <param name="refreshToken"></param>
     /// <returns></returns>
     [HttpPost("refresh")]
-    public IActionResult RefreshToken([FromBody] string refreshToken)
+    public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
     {
-        var tokenEntry = _refreshTokens.FirstOrDefault(rt =>
-        rt.Token == refreshToken &&
-        rt.RefreshTokenExpiryTime > DateTime.UtcNow);
-
-        if (tokenEntry is null)
-            return Unauthorized("Invalid or expired token");
-
-        var user = _users.FirstOrDefault(u => u.Id == tokenEntry.UserId);
-        if (user is null)
-            return Unauthorized("User not found");
-
-        var newAccessToken = GenerateJwtToken(user);
-        var newRefreshToken = GenerateRefreshToken();
-
-        tokenEntry.Token = newRefreshToken;
-        tokenEntry.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10);
-
-        return Ok(new
-        {
-            accessToken = newAccessToken,
-            refreshToken = newRefreshToken
-        });
-
+        var result = await _mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken });
+        return Ok(result);
     }
 
-
-    private string GenerateJwtToken(User user)
-    {
-        var claims = new[]
-        {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
-
-                // Additional Claims
-                new Claim("IsPremiumUser", (user.Id % 2 == 0).ToString()), 
-                new Claim("Department", "Engineering")
-            };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(60),
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-    private string GenerateRefreshToken()
-    {
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-    }
 }
