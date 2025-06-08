@@ -2,10 +2,11 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MusicStore.Identity.Models;
 
-namespace LeverX.WebAPI.Helpers;
+namespace MusicStore.Identity.Services;
 
 public static class JwtHelper
 {

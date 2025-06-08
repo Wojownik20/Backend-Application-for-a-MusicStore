@@ -1,6 +1,6 @@
 ﻿using BCrypt.Net;
 
-namespace LeverX.WebAPI.Helpers;
+namespace MusicStore.Identity.Services;
 
 public static class PasswordHasher
 {

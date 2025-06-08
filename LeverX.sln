@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Identity.Models"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Identity.Db", "MusicStore.Identity.Db\MusicStore.Identity.Db.csproj", "{FF23440A-1502-4F92-8C9F-B5728633A261}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Identity.Services", "MusicStore.Identity.Services\MusicStore.Identity.Services.csproj", "{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{FF23440A-1502-4F92-8C9F-B5728633A261}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF23440A-1502-4F92-8C9F-B5728633A261}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF23440A-1502-4F92-8C9F-B5728633A261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Wpisz 'Bearer {twój_token}'"
+        Description = "Type your Bearer {bearer}'"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -55,6 +55,7 @@ builder.Services.RegisterDbContext(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.RegisterPlatformServices();

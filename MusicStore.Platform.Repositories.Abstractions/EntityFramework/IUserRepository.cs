@@ -14,6 +14,7 @@ namespace MusicStore.Platform.Repositories.Interfaces.EntityFramework
         Task AddAsync(User user);
         Task<bool> UsernameExistsAsync(string username);
         Task SaveChangesAsync();
+        Task UpdateAsync(User user);
     }
 
 }

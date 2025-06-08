@@ -14,6 +14,7 @@
     <Compile Remove="MusicStore.Core.Db\**" />
     <Compile Remove="MusicStore.Identity.Db\**" />
     <Compile Remove="MusicStore.Identity.Models\**" />
+    <Compile Remove="MusicStore.Identity.Services\**" />
     <Compile Remove="MusicStore.Platform.Interfaces\**" />
     <Compile Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Compile Remove="MusicStore.Platform.Repositories\**" />
@@ -24,6 +25,7 @@
     <Content Remove="MusicStore.Core.Db\**" />
     <Content Remove="MusicStore.Identity.Db\**" />
     <Content Remove="MusicStore.Identity.Models\**" />
+    <Content Remove="MusicStore.Identity.Services\**" />
     <Content Remove="MusicStore.Platform.Interfaces\**" />
     <Content Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Content Remove="MusicStore.Platform.Repositories\**" />
@@ -34,6 +36,7 @@
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
     <EmbeddedResource Remove="MusicStore.Identity.Db\**" />
     <EmbeddedResource Remove="MusicStore.Identity.Models\**" />
+    <EmbeddedResource Remove="MusicStore.Identity.Services\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Interfaces\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories\**" />
@@ -44,6 +47,7 @@
     <None Remove="MusicStore.Core.Db\**" />
     <None Remove="MusicStore.Identity.Db\**" />
     <None Remove="MusicStore.Identity.Models\**" />
+    <None Remove="MusicStore.Identity.Services\**" />
     <None Remove="MusicStore.Platform.Interfaces\**" />
     <None Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <None Remove="MusicStore.Platform.Repositories\**" />
@@ -73,6 +77,7 @@
     <ProjectReference Include="MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
     <ProjectReference Include="MusicStore.Identity.Db\MusicStore.Identity.Db.csproj" />
     <ProjectReference Include="MusicStore.Identity.Models\MusicStore.Identity.Models.csproj" />
+    <ProjectReference Include="MusicStore.Identity.Services\MusicStore.Identity.Services.csproj" />
     <ProjectReference Include="MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj" />
@@ -81,7 +86,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebAPI\Features\Authentication\Validations\" />
+    <Folder Include="WebAPI\Helpers\" />
   </ItemGroup>
 
 </Project>

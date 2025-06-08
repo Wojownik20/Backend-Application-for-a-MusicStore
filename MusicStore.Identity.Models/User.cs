@@ -2,12 +2,12 @@
 
 namespace MusicStore.Identity.Models
 {
-    public record User
+    public class User
     {
-        public int Id { get; init; }
-        public string Username { get; init; }
-        public string Password { get; init; }
-        public UserRole Role { get; init; } = UserRole.User;
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public UserRole Role { get; set; } = UserRole.User;
 
         public ICollection<RefreshToken> RefreshTokens { get; init; } = new List<RefreshToken>();
     }

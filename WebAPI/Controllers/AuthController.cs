@@ -5,13 +5,14 @@ using System.Security.Cryptography;
 using System.Text;
 using LeverX.WebAPI.Features.Authentication.Commands;
 using LeverX.WebAPI.Features.JWT.Dto;
-using LeverX.WebAPI.Helpers;
+using LeverXWebAPI.Features.Authentication.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using MusicStore.Identity.Models;
+using MusicStore.Identity.Services;
 using RegisterDto = LeverX.WebAPI.Features.JWT.Dto.RegisterDto;
 
 
@@ -96,6 +97,19 @@ public class AuthController : ControllerBase
     {
         var result = await _mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken });
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Changes password for the user
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return result ? Ok("Password changed successfully.") : BadRequest("Invalid credentials.");
     }
 
 }
