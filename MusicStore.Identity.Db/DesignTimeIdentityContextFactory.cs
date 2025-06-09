@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace MusicStore.Identity.Db;
 
@@ -7,10 +8,13 @@ public class DesignTimeIdentityDbContextFactory : IDesignTimeDbContextFactory<Id
 {
     public IdentityDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<IdentityDbContext>();
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "LeverX.WebAPI"))
+            .AddJsonFile("appsettings.json", optional: false)
+            .Build();
 
-        // Connection string na sztywno – NIE z appsettings.json
-        optionsBuilder.UseSqlite("Data Source=identity.db");
+        var optionsBuilder = new DbContextOptionsBuilder<IdentityDbContext>();
+        optionsBuilder.UseSqlite(config.GetConnectionString("IdentityConnection"));
 
         return new IdentityDbContext(optionsBuilder.Options);
     }

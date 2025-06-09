@@ -9,6 +9,6 @@ namespace MusicStore.Identity.Models
         public string Token { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
-        public User User { get; set; } = null!;
+        public User User { get; set; }
     }
 }

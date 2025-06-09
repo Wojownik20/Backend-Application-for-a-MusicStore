@@ -18,37 +18,6 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "LeverX", Version = "v1" });
-
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Type your Bearer {bearer}'"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
 builder.Services.RegisterDbContext(builder.Configuration);
@@ -56,6 +25,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerDocumentation();
 
 
 builder.Services.RegisterPlatformServices();

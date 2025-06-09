@@ -13,9 +13,6 @@ public class IdentityDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.RefreshTokens)
-            .WithOne(rt => rt.User)
-            .HasForeignKey(rt => rt.UserId);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(IdentityDbContext).Assembly);
     }
 }

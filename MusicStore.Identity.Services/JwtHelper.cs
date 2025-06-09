@@ -10,6 +10,7 @@ namespace MusicStore.Identity.Services;
 
 public static class JwtHelper
 {
+    private static int Expirytime = 60;
     public static string GenerateJwtToken(User user, IConfiguration config)
     {
         var claims = new[]
@@ -27,7 +28,7 @@ public static class JwtHelper
             issuer: config["Jwt:Issuer"],
             audience: config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(60),
+            expires: DateTime.UtcNow.AddMinutes(Expirytime),
             signingCredentials: creds
         );
 
