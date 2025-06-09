@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MusicStore.Authentication.Tests\**" />
     <Compile Remove="MusicStore.Core.Data\**" />
     <Compile Remove="MusicStore.Core.Db\**" />
     <Compile Remove="MusicStore.Identity.Db\**" />
@@ -22,6 +23,7 @@
     <Compile Remove="MusicStore.Shared.Models\**" />
     <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
     <Compile Remove="WebAPI\Helpers\**" />
+    <Content Remove="MusicStore.Authentication.Tests\**" />
     <Content Remove="MusicStore.Core.Data\**" />
     <Content Remove="MusicStore.Core.Db\**" />
     <Content Remove="MusicStore.Identity.Db\**" />
@@ -34,6 +36,7 @@
     <Content Remove="MusicStore.Shared.Models\**" />
     <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
     <Content Remove="WebAPI\Helpers\**" />
+    <EmbeddedResource Remove="MusicStore.Authentication.Tests\**" />
     <EmbeddedResource Remove="MusicStore.Core.Data\**" />
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
     <EmbeddedResource Remove="MusicStore.Identity.Db\**" />
@@ -46,6 +49,7 @@
     <EmbeddedResource Remove="MusicStore.Shared.Models\**" />
     <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
     <EmbeddedResource Remove="WebAPI\Helpers\**" />
+    <None Remove="MusicStore.Authentication.Tests\**" />
     <None Remove="MusicStore.Core.Data\**" />
     <None Remove="MusicStore.Core.Db\**" />
     <None Remove="MusicStore.Identity.Db\**" />
