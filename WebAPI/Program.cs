@@ -44,6 +44,9 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 app.UseMiddleware<ValidationExceptionMiddleware>();
 
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("🚀 Application started successfully at {Time}", DateTime.UtcNow);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

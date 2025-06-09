@@ -10,7 +10,7 @@ public class RegisterUserCommandHandlerTests
     [Fact]
     public async Task Handle_WhenUserDoesNotExist_RegistersUserAndReturnsSuccessMessage()
     {
-        var mockRepo = new Mock<IUserRepository>();
+        var mockRepo = new Mock<IUserRepository>(); // Mock of real Interface IUserRepository
         var command = new RegisterUserCommand
         {
             Username = "newuser",
@@ -19,12 +19,12 @@ public class RegisterUserCommandHandlerTests
 
         mockRepo.Setup(r => r.UsernameExistsAsync(command.Username)).ReturnsAsync(false);
 
-        var handler = new RegisterUserCommandHandler(mockRepo.Object);
+        var handler = new RegisterUserCommandHandler(mockRepo.Object); // handler of Mock repo
 
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.Equal("User registered", result);
-        mockRepo.Verify(r => r.AddAsync(It.Is<User>(u => u.Username == command.Username)), Times.Once);
+        mockRepo.Verify(r => r.AddAsync(It.Is<User>(u => u.Username == command.Username)), Times.Once); // was it once or more
         mockRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
     }
 
@@ -42,7 +42,7 @@ public class RegisterUserCommandHandlerTests
 
         var handler = new RegisterUserCommandHandler(mockRepo.Object);
 
-        var exception = await Assert.ThrowsAsync<Exception>(() => handler.Handle(command, CancellationToken.None));
+        var exception = await Assert.ThrowsAsync<Exception>(() => handler.Handle(command, CancellationToken.None)); //Assert that exception is thrown
         Assert.Equal("User already exists", exception.Message);
 
         mockRepo.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
