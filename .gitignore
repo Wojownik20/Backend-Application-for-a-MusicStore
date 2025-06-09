@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore SQLite database files
+*.db
+*.db-shm
+*.db-wal
+!MusicStore.Core.Db/
+!MusicStore.Identity.Db/

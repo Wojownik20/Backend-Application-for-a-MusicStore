@@ -12,6 +12,9 @@
   <ItemGroup>
     <Compile Remove="MusicStore.Core.Data\**" />
     <Compile Remove="MusicStore.Core.Db\**" />
+    <Compile Remove="MusicStore.Identity.Db\**" />
+    <Compile Remove="MusicStore.Identity.Models\**" />
+    <Compile Remove="MusicStore.Identity.Services\**" />
     <Compile Remove="MusicStore.Platform.Interfaces\**" />
     <Compile Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Compile Remove="MusicStore.Platform.Repositories\**" />
@@ -20,6 +23,9 @@
     <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
     <Content Remove="MusicStore.Core.Data\**" />
     <Content Remove="MusicStore.Core.Db\**" />
+    <Content Remove="MusicStore.Identity.Db\**" />
+    <Content Remove="MusicStore.Identity.Models\**" />
+    <Content Remove="MusicStore.Identity.Services\**" />
     <Content Remove="MusicStore.Platform.Interfaces\**" />
     <Content Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <Content Remove="MusicStore.Platform.Repositories\**" />
@@ -28,6 +34,9 @@
     <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
     <EmbeddedResource Remove="MusicStore.Core.Data\**" />
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
+    <EmbeddedResource Remove="MusicStore.Identity.Db\**" />
+    <EmbeddedResource Remove="MusicStore.Identity.Models\**" />
+    <EmbeddedResource Remove="MusicStore.Identity.Services\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Interfaces\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <EmbeddedResource Remove="MusicStore.Platform.Repositories\**" />
@@ -36,6 +45,9 @@
     <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
     <None Remove="MusicStore.Core.Data\**" />
     <None Remove="MusicStore.Core.Db\**" />
+    <None Remove="MusicStore.Identity.Db\**" />
+    <None Remove="MusicStore.Identity.Models\**" />
+    <None Remove="MusicStore.Identity.Services\**" />
     <None Remove="MusicStore.Platform.Interfaces\**" />
     <None Remove="MusicStore.Platform.Repositories.Abstractions\**" />
     <None Remove="MusicStore.Platform.Repositories\**" />
@@ -46,9 +58,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -61,11 +75,18 @@
   <ItemGroup>
     <ProjectReference Include="MusicStore.Core.Data\MusicStore.Core.Data.csproj" />
     <ProjectReference Include="MusicStore.Core.Db\MusicStore.Core.Db.csproj" />
+    <ProjectReference Include="MusicStore.Identity.Db\MusicStore.Identity.Db.csproj" />
+    <ProjectReference Include="MusicStore.Identity.Models\MusicStore.Identity.Models.csproj" />
+    <ProjectReference Include="MusicStore.Identity.Services\MusicStore.Identity.Services.csproj" />
     <ProjectReference Include="MusicStore.Platform.Interfaces\MusicStore.Platform.Services.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories.Abstractions\MusicStore.Platform.Repositories.Interfaces.csproj" />
     <ProjectReference Include="MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj" />
     <ProjectReference Include="MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />
     <ProjectReference Include="MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WebAPI\Helpers\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Core.Data;
+using MusicStore.Identity.Models;
 
 namespace MusicStore.Core.Db;
 
@@ -19,6 +20,7 @@ public class MusicStoreContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.ApplyConfiguration(new OrderConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
+
 
     }
 }
