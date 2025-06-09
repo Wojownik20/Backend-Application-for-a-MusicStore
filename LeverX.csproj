@@ -21,6 +21,7 @@
     <Compile Remove="MusicStore.Platform.Services\**" />
     <Compile Remove="MusicStore.Shared.Models\**" />
     <Compile Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <Compile Remove="WebAPI\Helpers\**" />
     <Content Remove="MusicStore.Core.Data\**" />
     <Content Remove="MusicStore.Core.Db\**" />
     <Content Remove="MusicStore.Identity.Db\**" />
@@ -32,6 +33,7 @@
     <Content Remove="MusicStore.Platform.Services\**" />
     <Content Remove="MusicStore.Shared.Models\**" />
     <Content Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <Content Remove="WebAPI\Helpers\**" />
     <EmbeddedResource Remove="MusicStore.Core.Data\**" />
     <EmbeddedResource Remove="MusicStore.Core.Db\**" />
     <EmbeddedResource Remove="MusicStore.Identity.Db\**" />
@@ -43,6 +45,7 @@
     <EmbeddedResource Remove="MusicStore.Platform.Services\**" />
     <EmbeddedResource Remove="MusicStore.Shared.Models\**" />
     <EmbeddedResource Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <EmbeddedResource Remove="WebAPI\Helpers\**" />
     <None Remove="MusicStore.Core.Data\**" />
     <None Remove="MusicStore.Core.Db\**" />
     <None Remove="MusicStore.Identity.Db\**" />
@@ -54,6 +57,7 @@
     <None Remove="MusicStore.Platform.Services\**" />
     <None Remove="MusicStore.Shared.Models\**" />
     <None Remove="MusicStore.Shared.Services.Abstractions\**" />
+    <None Remove="WebAPI\Helpers\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +73,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
@@ -83,10 +89,6 @@
     <ProjectReference Include="MusicStore.Platform.Repositories\MusicStore.Platform.Repositories.csproj" />
     <ProjectReference Include="MusicStore.Platform.Services\MusicStore.Platform.Services.csproj" />
     <ProjectReference Include="MusicStore.Shared.Models\MusicStore.Shared.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="WebAPI\Helpers\" />
   </ItemGroup>
 
 </Project>
