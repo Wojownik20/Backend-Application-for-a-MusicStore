@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Identity.Db", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Identity.Services", "MusicStore.Identity.Services\MusicStore.Identity.Services.csproj", "{9324C523-BB01-4C8B-8023-9DC95B5AF8C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicStore.Authentication.Tests", "MusicStore.Authentication.Tests\MusicStore.Authentication.Tests.csproj", "{424BB71E-D69F-48F4-A2A6-DEB1E37E7B2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "MusicStore.Authentication.Tests\Test.csproj", "{424BB71E-D69F-48F4-A2A6-DEB1E37E7B2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

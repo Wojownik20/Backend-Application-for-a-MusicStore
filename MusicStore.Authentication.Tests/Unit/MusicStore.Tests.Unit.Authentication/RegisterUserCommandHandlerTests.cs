@@ -6,7 +6,7 @@ using MusicStore.Identity.Models;
 using MusicStore.Platform.Repositories.Interfaces.EntityFramework;
 using Xunit;
 
-namespace MusicStore.Authentication.Tests.Unit.Authentication.RegisterUser;
+namespace Tests.Unit.MusicStore.Tests.Unit.Authentication;
 public class RegisterUserCommandHandlerTests
 {
     [Fact]
