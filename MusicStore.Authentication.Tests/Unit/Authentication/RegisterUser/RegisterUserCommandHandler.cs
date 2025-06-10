@@ -1,16 +1,19 @@
 ﻿using LeverX.WebAPI.Features.Authentication.Commands;
 using LeverX.WebAPI.Features.Authentication.Handlers;
+using Microsoft.Extensions.Logging;
 using Moq;
 using MusicStore.Identity.Models;
 using MusicStore.Platform.Repositories.Interfaces.EntityFramework;
 using Xunit;
 
+namespace MusicStore.Authentication.Tests.Unit.Authentication.RegisterUser;
 public class RegisterUserCommandHandlerTests
 {
     [Fact]
     public async Task Handle_WhenUserDoesNotExist_RegistersUserAndReturnsSuccessMessage()
     {
         var mockRepo = new Mock<IUserRepository>(); // Mock of real Interface IUserRepository
+        var mockLogger = new Mock<ILogger<RegisterUserCommandHandler>>();
         var command = new RegisterUserCommand
         {
             Username = "newuser",
@@ -19,7 +22,7 @@ public class RegisterUserCommandHandlerTests
 
         mockRepo.Setup(r => r.UsernameExistsAsync(command.Username)).ReturnsAsync(false);
 
-        var handler = new RegisterUserCommandHandler(mockRepo.Object); // handler of Mock repo
+        var handler = new RegisterUserCommandHandler(mockRepo.Object, mockLogger.Object); // handler of Mock repo
 
         var result = await handler.Handle(command, CancellationToken.None);
 
@@ -32,6 +35,7 @@ public class RegisterUserCommandHandlerTests
     public async Task Handle_WhenUserAlreadyExists_ThrowsException()
     {
         var mockRepo = new Mock<IUserRepository>();
+        var mockLogger = new Mock<ILogger<RegisterUserCommandHandler>>();
         var command = new RegisterUserCommand
         {
             Username = "existinguser",
@@ -40,7 +44,7 @@ public class RegisterUserCommandHandlerTests
 
         mockRepo.Setup(r => r.UsernameExistsAsync(command.Username)).ReturnsAsync(true);
 
-        var handler = new RegisterUserCommandHandler(mockRepo.Object);
+        var handler = new RegisterUserCommandHandler(mockRepo.Object, mockLogger.Object);
 
         var exception = await Assert.ThrowsAsync<Exception>(() => handler.Handle(command, CancellationToken.None)); //Assert that exception is thrown
         Assert.Equal("User already exists", exception.Message);
