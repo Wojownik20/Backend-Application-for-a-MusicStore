@@ -1,10 +1,11 @@
-﻿using LeverX.WebAPI.Extensions;
+﻿using System.Text.Json;
+using LeverX.WebAPI.Extensions;
 using LeverX.WebAPI.Middleware.ValidationMiddleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using MusicStore.Core.Db;
 using MusicStore.Identity.Db;
 using MusicStore.Platform.Services.Extensions;
+using MusicStore.WebApi.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerDocumentation();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<MusicStoreContext>("MainDb")
+    .AddDbContextCheck<IdentityDbContext>("IdentityDb");
 
 
 builder.Services.RegisterPlatformServices();
@@ -39,6 +43,9 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 app.UseMiddleware<ValidationExceptionMiddleware>();
+
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("🚀 Application started successfully at {Time}", DateTime.UtcNow);
 
 if (app.Environment.IsDevelopment())
 {
@@ -55,4 +62,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHealthCheckEndpoint();
+
 app.Run();
+
+
