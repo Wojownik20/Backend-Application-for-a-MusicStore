@@ -86,7 +86,7 @@ Features/
 
 ## 👤 Author
 
-**WAdam Wojciechowski “Wojownik20”**
+**Adam Wojciechowski “Wojownik20”**
 **Shoutout to my mentor of the project Mr Ivan**
 
 GitHub: [@Wojownik20](https://github.com/Wojownik20)  
