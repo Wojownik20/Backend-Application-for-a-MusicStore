@@ -87,8 +87,9 @@ Features/
 ## 👤 Author
 
 **Adam Wojciechowski “Wojownik20”**
-**Shoutout to my mentor of the project Mr Ivan**
 
 GitHub: [@Wojownik20](https://github.com/Wojownik20)  
+Shoutout to the project mentor **Mr Ivan**
+
 Project created for educational purposes and as a backend architecture showcase.
 
