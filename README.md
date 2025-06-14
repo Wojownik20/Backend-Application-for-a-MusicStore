@@ -1,24 +1,94 @@
-# LeverX - Music Store Project 🎶
+# 🎵 Backend Application for a MusicStore
 
-Web API Project for LeverX .NET Programme. 
-App simulates a work of Music Store - it operates on products, employees, customers and orders itself.
+A lightweight and modular backend solution for a digital music store, designed using modern .NET practices.  
+This project follows the CQRS pattern via MediatR and Entity Framework Core, enabling scalable and maintainable development of e-commerce-like functionality.
 
-## 🔧 Tech Stack
-- ASP.NET Core 8
-- Entity Framework Core
-- SQL Server
+---
 
-## Data Models 
-- `Product` - CD's, Vinyl's, Merchandise
-- `Employees` - Name, Date of Birth, Salary
-- `Customer` - Name, Date of Birth, Email address
-- `Order`- When bought, Total Price, Customer, Employee, Products
+## 🧠 Features at a Glance
 
-Every Model has a CRUD operation system : Get, Post, Put, Delete .
+- 🎸 Manage music albums, genres, and artists
+- 📦 Create and track orders
+- 🔐 User authentication with JWT-based access and refresh tokens
+- ⚙️ Clean architecture using CQRS with MediatR
+- 🧪 Expandable structure for unit testing and integration testing
+- 📁 EF Core code-first migrations
 
-## 🌐 API Documentation
-Project has a full Swagger documentation (XML comments in code).
+---
 
+## 💻 Tech Stack
 
-## 🧑‍🎓 Autor
-Adam ✌️
+- **.NET (Core/6/7)** – backend framework  
+- **C#** – main programming language  
+- **Entity Framework Core** – ORM for database access  
+- **MediatR** – CQRS pattern implementation  
+- **SQL Server / LocalDB** – persistent storage  
+- **ASP.NET MVC/Web API** – request routing & controllers
+
+---
+
+## ⚙️ Requirements
+
+- .NET SDK 6.0 or newer  
+- Visual Studio 2022+ or VS Code  
+- SQL Server or LocalDB (or SQLite for local development)  
+- Optional: Postman or Swagger for testing endpoints
+
+---
+
+## 🧱 Architecture: CQRS with MediatR
+
+The application follows the **Command-Query Responsibility Segregation** principle:
+
+- 🔹 `Commands` handle data modifications (e.g., create/update album)
+- 🔹 `Queries` handle data retrieval
+- 🔹 `Handlers` process these requests via **MediatR**, reducing controller complexity
+- 🔹 Controllers are *thin*, only forwarding requests to the appropriate handlers
+
+Directory structure:
+```
+Features/
+├── Albums/
+│   ├── Commands/
+│   ├── Queries/
+│   ├── Handlers/
+│   └── Validators/
+├── Authentication/
+│   ├── Commands/
+│   ├── Queries/
+│   ├── Handlers/
+│   └── Dtos/
+```
+
+---
+
+## 📚 Functionalities
+
+- Add / edit / delete albums
+- Retrieve artist and album data
+- Filter music by genre or artist
+- Create and manage customer orders
+- Authenticate users and generate JWT access + refresh tokens
+- Database migrations using EF Core
+- Command & Query validation with FluentValidation (optional)
+
+---
+
+## 🚧 Roadmap
+
+- ✅ Implement JWT authentication with refresh token support
+- 🧪 Implement xUnit/NUnit tests for CQRS handlers
+- 🌐 Add Swagger for API documentation
+- 🛠️ Add logging (Serilog or similar)
+- 🧾 Role-based access control (Admin & User)
+
+---
+
+## 👤 Author
+
+**WAdam Wojciechowski “Wojownik20”**
+**Shoutout to my mentor of the project Mr Ivan**
+
+GitHub: [@Wojownik20](https://github.com/Wojownik20)  
+Project created for educational purposes and as a backend architecture showcase.
+
